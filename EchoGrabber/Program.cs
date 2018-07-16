@@ -45,7 +45,7 @@ namespace EchoGrabber
                 xmlWr.WriteEndElement();//meta
 
                 xmlWr.WriteStartElement("title");
-                xmlWr.WriteString($"Подкаст программы {progName}");
+                xmlWr.WriteString($"Подкасты программы «{progName}»");
                 xmlWr.WriteEndElement();//title
 
                 xmlWr.WriteStartElement("style");
@@ -60,9 +60,13 @@ namespace EchoGrabber
                     "}" +
                     "td{" +
                     "  border-left: 2px solid;" +
+                    "  padding: 10px;" +
                     "}" +
                     "tr{" +
                     "  border-top: 1px solid;" +
+                    "}" +
+                    "tr:nth-child(odd) {" +
+                    "  background-color: #f2f2f2;" +
                     "}");
                 xmlWr.WriteEndElement();//style
                 xmlWr.WriteEndElement(); //head
@@ -72,6 +76,7 @@ namespace EchoGrabber
                 xmlWr.WriteStartElement("a");
                 xmlWr.WriteAttributeString("href", $"https://echo.msk.ru{url}");
                 xmlWr.WriteAttributeString("target", "_blank");
+                xmlWr.WriteAttributeString("title", $"Перейти на страницу программы «{progName}»");
                 xmlWr.WriteString(progName);
                 xmlWr.WriteEndElement();//a
                 xmlWr.WriteEndElement();//h2
@@ -91,6 +96,7 @@ namespace EchoGrabber
                     xmlWr.WriteStartElement("td");
                     xmlWr.WriteStartElement("a");
                     xmlWr.WriteAttributeString("href", item.Url);
+                    xmlWr.WriteAttributeString("title", $"Скачать подкаст за {item.DateTime}. ({item.Size.Trim()})");
                     xmlWr.WriteString(item.Title);
                     //Console.BackgroundColor = colors[(++n) % l];
                     //Console.ForegroundColor = colors[l - n % l - 1];

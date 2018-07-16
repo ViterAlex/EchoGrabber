@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EchoGrabber")]
+[assembly: AssemblyTitle("EchoGrabber.GUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EchoGrabber")]
+[assembly: AssemblyProduct("EchoGrabber.GUI")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("affbe42d-1c13-4555-8527-28b5ba5c3cbd")]
+[assembly: Guid("c9385e54-55f4-4a96-a445-9eafb6deb1a1")]
 
 // Version information for an assembly consists of the following four values:
 //

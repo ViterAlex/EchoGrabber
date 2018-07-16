@@ -1,0 +1,13 @@
+﻿Пути для передач-подкастов
+
+//div[@class='conthead news']/h1 — Название программы
+//div[contains(@class,'mainpreview')]//div[@class='prevcontent'] — плашка выпуска
+	//*[@class='title type2'] — Название выпуска
+	//*[@class='datetime']/@title — дата и время выпуска
+	//a[@class='download iblock'] — ссылка на скачивание выпуска
+	//a[contains(@class,'listen')]//span[@class='size'] — продолжительность выпуска
+	//a[contains(@class,'download')]//span[@class='size'] — объём в МБ
+
+//div[@class='pager']/a[@rel='next'] — ссылка на следующую страницу
+
+Пути для блогов с аудио:

@@ -19,13 +19,13 @@ namespace EchoGrabber
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(progname);
             Console.ResetColor();
-            CreateHtml(url, filename);
+            CreateHtml(filename, url);
 
             Process.Start(filename);
             Console.WriteLine();
         }
 
-        private static void CreateHtml(string url, string filename)
+        private static void CreateHtml(string filename, string url)
         {
             var n = 0;
             string progName = Grabber.GetProgramName(url);
@@ -82,7 +82,7 @@ namespace EchoGrabber
                 xmlWr.WriteEndElement();//h2
                 xmlWr.WriteStartElement("table");
 
-                foreach (var item in Grabber.GetAllLinks(url))
+                foreach (var item in Grabber.GetAllPodcastLinks(url))
                 {
                     if (item.Url.IsNullOrEmpty())
                     {
@@ -90,22 +90,25 @@ namespace EchoGrabber
                     }
                     Console.Write($"\rПолучение ссылок: {++n}");
                     xmlWr.WriteStartElement("tr");
+
                     xmlWr.WriteStartElement("td");
                     xmlWr.WriteString(n.ToString().PadRight(10, '\u00A0'));
                     xmlWr.WriteEndElement();//td
+
                     xmlWr.WriteStartElement("td");
+
                     xmlWr.WriteStartElement("a");
                     xmlWr.WriteAttributeString("href", item.Url);
                     xmlWr.WriteAttributeString("title", $"Скачать подкаст за {item.DateTime}. ({item.Size.Trim()})");
                     xmlWr.WriteString(item.Title);
-                    //Console.BackgroundColor = colors[(++n) % l];
-                    //Console.ForegroundColor = colors[l - n % l - 1];
-                    //Console.WriteLine($"{n,-5}{item}");
                     xmlWr.WriteEndElement();//a
+
                     xmlWr.WriteEndElement();//td
+
                     xmlWr.WriteStartElement("td");
                     xmlWr.WriteString(item.DateTime);
                     xmlWr.WriteEndElement();//td
+
                     xmlWr.WriteEndElement();//tr
                 }
             }

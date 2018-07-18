@@ -10,18 +10,8 @@ namespace EchoGrabber.GUI
         public MainForm()
         {
             InitializeComponent();
-            archivedProgramsViewer.ShowLInks(Splash.Archived);
-            actualProgramsViewer.ShowLInks(Splash.Actual);
-            //_programs = Grabber.GetProgramLinks();
+            archivedProgramsViewer.ShowLinks(EchoPrograms.Archived);
+            actualProgramsViewer.ShowLinks(EchoPrograms.Actual);
         }
-
-        //public MainForm(IEnumerable<IssueInfo> programs, IEnumerable<IssueInfo> archived)
-        //{
-        //    InitializeComponent();
-        //    //_programs = programs;
-        //    //LinkFilter = (s) => true;
-        //    //FindLinks(_programs);
-        //}
-
     }
 }

@@ -1,10 +1,9 @@
 ﻿namespace EchoGrabber
 {
-    public class IssueInfo
+    //Информация о выпуске подкаста
+    public class IssueInfo : Info
     {
         public string DateTime { get; set; }
-        public string Url { get; set; }
-        public string Title { get; set; }
         public string Size { get; set; }
         public string Duration { get; set; }
 

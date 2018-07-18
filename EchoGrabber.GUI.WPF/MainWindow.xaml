@@ -1,0 +1,160 @@
+﻿<Window x:Class="EchoGrabber.GUI.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:EchoGrabber.GUI.WPF.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Icon="pack://application:,,,/Resources/echo.ico"
+        Height="450"
+        Width="800">
+    <Window.Resources>
+        <vm:CommandReference x:Key="CreatePlaylistCommandReference"
+                             Command="{Binding CreatePlaylistCommand}" />
+        <vm:CommandReference x:Key="ShowPodcastsCommandReference"
+                             Command="{Binding ShowPodcastsCommand}" />
+    </Window.Resources>
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="FrameworkElement">
+                <Setter Property="Margin"
+                        Value="3" />
+            </Style>
+            <ControlTemplate x:Key="RadioButtonTemplate"
+                             TargetType="ToggleButton">
+                <TextBlock x:Name="innerText"
+                           Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                           Cursor="Hand">
+                                    <ContentPresenter />
+                </TextBlock>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="ToggleButton.IsChecked"
+                             Value="True">
+                        <Setter TargetName="innerText"
+                                Property="TextDecorations"
+                                Value="Underline" />
+                        <Setter TargetName="innerText"
+                                Property="FontWeight"
+                                Value="Bold" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+            <Style TargetType="RadioButton"
+                   BasedOn="{StaticResource {x:Type ToggleButton}}">
+                <Setter Property="Margin"
+                        Value="3" />
+                <Setter Property="Padding"
+                        Value="10,3" />
+                <Setter Property="Template"
+                        Value="{StaticResource RadioButtonTemplate}" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton Content="Все"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="0"
+                             IsChecked="True" />
+                <RadioButton Content="1-9"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="1" />
+                <RadioButton Content="А-Г"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="2" />
+                <RadioButton Content="Д-З"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="3" />
+                <RadioButton Content="И-М"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="4" />
+                <RadioButton Content="Н-Р"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="5" />
+                <RadioButton Content="С-Ф"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="6" />
+                <RadioButton Content="Х-Ш"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="7" />
+                <RadioButton Content="Щ-Я"
+                             Command="{Binding FilterCommand}"
+                             CommandParameter="8" />
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right"
+                        Orientation="Horizontal"
+                        Grid.Column="1">
+                <RadioButton Content="Активные"
+                             IsChecked="True"
+                             Command="{Binding FilterActualCommand}" />
+                <RadioButton Content="Архив"
+                             Command="{Binding FilterArchiveCommand}" />
+            </StackPanel>
+        </Grid>
+        <ListBox ItemsSource="{Binding Podcasts}"
+                 Grid.Row="1"
+                 Name="listbox"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListBox.Resources>
+                <ControlTemplate x:Key="HyperlinkLikeButtonTemplate"
+                                 TargetType="{x:Type Button}">
+                    <TextBlock x:Name="innerText"
+                               Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                               Cursor="Hand">
+                                    <ContentPresenter />
+                    </TextBlock>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Button.IsMouseOver"
+                                 Value="true">
+                            <Setter TargetName="innerText"
+                                    Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            <Setter TargetName="innerText"
+                                    Property="TextDecorations"
+                                    Value="Underline" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+                <Style x:Key="HyperlinkLikeButton"
+                       TargetType="{x:Type Button}">
+                    <Setter Property="Template"
+                            Value="{StaticResource HyperlinkLikeButtonTemplate}" />
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True"
+                               Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Button Style="{StaticResource HyperlinkLikeButton}"
+                            Content="{Binding Title}"
+                            FontWeight="Bold"
+                            Tag="{Binding}">
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Все ссылки"
+                                          Command="{StaticResource ShowPodcastsCommandReference}"
+                                          CommandParameter="{Binding PlacementTarget.Tag, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                                <MenuItem Header="Создать плейлист"
+                                          Command="{StaticResource CreatePlaylistCommandReference}"
+                                          CommandParameter="{Binding PlacementTarget.Tag,  Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

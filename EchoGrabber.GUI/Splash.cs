@@ -18,13 +18,32 @@ namespace EchoGrabber.GUI
             DialogResult = DialogResult.Cancel;
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected async override void OnShown(EventArgs e)
         {
-            base.OnLoad(e);
-            Actual = Grabber.GetProgramLinks();
-            Archived = Grabber.GetProgramLinks("/programs/archived");
-            DialogResult = DialogResult.OK;
+            base.OnShown(e);
+            var result = await new TaskFactory<DialogResult>().StartNew(() =>
+            {
+                try
+                {
+                    EchoPrograms.Actual = Grabber.GetPodcastLinks().ToList(); ;
+                    EchoPrograms.Archived = Grabber.GetPodcastLinks("/programs/archived").ToList();
+                }
+                catch (Exception)
+                {
+
+                    return DialogResult.Cancel;
+                }
+                return DialogResult.OK;
+            });
+            DialogResult = result;
+            Close();
         }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            e.Graphics.DrawImage(Properties.Resources.echo_logo, 0f, 0f, ClientRectangle.Width, ClientRectangle.Height);
+        }
+
 
         internal static IEnumerable<IssueInfo> Actual { get; private set; }
         internal static IEnumerable<IssueInfo> Archived { get; private set; }

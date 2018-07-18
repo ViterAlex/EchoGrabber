@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 
@@ -18,11 +14,13 @@ namespace EchoGrabber.GUI
             InitializeComponent();
             LinkFilter = (s) => true;
         }
-        private IEnumerable<IssueInfo> _programs;
+        private IEnumerable<PodcastInfo> _programs;
         private Func<string, bool> LinkFilter;
 
-        public void ShowLInks(IEnumerable<IssueInfo> infos)
+        //Создание LinkLabel для каждой передачи
+        public void ShowLinks(IEnumerable<PodcastInfo> infos)
         {
+            if (infos == null) return;
             _programs = infos;
             flowLayoutPanel1.Controls.Clear();
             flowLayoutPanel1.SuspendLayout();
@@ -58,7 +56,7 @@ namespace EchoGrabber.GUI
         private void Filter()
         {
             var filtered = _programs.Where(p => LinkFilter(p.Title));
-            ShowLInks(filtered);
+            ShowLinks(filtered);
         }
 
         //1-9

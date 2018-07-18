@@ -68,6 +68,7 @@
             // 
             this.nofiltertoolStripMenuItem.Name = "nofiltertoolStripMenuItem";
             this.nofiltertoolStripMenuItem.Size = new System.Drawing.Size(38, 20);
+            this.nofiltertoolStripMenuItem.Tag = "0";
             this.nofiltertoolStripMenuItem.Text = "Все";
             this.nofiltertoolStripMenuItem.Click += new System.EventHandler(this.nofiltertoolStripMenuItem_Click);
             // 
@@ -75,6 +76,7 @@
             // 
             this.filter1_9toolStripMenuItem.Name = "filter1_9toolStripMenuItem";
             this.filter1_9toolStripMenuItem.Size = new System.Drawing.Size(36, 20);
+            this.filter1_9toolStripMenuItem.Tag = "1";
             this.filter1_9toolStripMenuItem.Text = "1-9";
             this.filter1_9toolStripMenuItem.Click += new System.EventHandler(this.filter1_9toolStripMenuItem_Click);
             // 
@@ -82,6 +84,7 @@
             // 
             this.filterA_GToolStripMenuItem.Name = "filterA_GToolStripMenuItem";
             this.filterA_GToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
+            this.filterA_GToolStripMenuItem.Tag = "2";
             this.filterA_GToolStripMenuItem.Text = "А-Г";
             this.filterA_GToolStripMenuItem.Click += new System.EventHandler(this.filterA_GToolStripMenuItem_Click);
             // 
@@ -89,6 +92,7 @@
             // 
             this.filterD_ZToolStripMenuItem.Name = "filterD_ZToolStripMenuItem";
             this.filterD_ZToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.filterD_ZToolStripMenuItem.Tag = "3";
             this.filterD_ZToolStripMenuItem.Text = "Д-З";
             this.filterD_ZToolStripMenuItem.Click += new System.EventHandler(this.filterD_ZToolStripMenuItem_Click);
             // 
@@ -96,6 +100,7 @@
             // 
             this.filterI_MToolStripMenuItem.Name = "filterI_MToolStripMenuItem";
             this.filterI_MToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.filterI_MToolStripMenuItem.Tag = "4";
             this.filterI_MToolStripMenuItem.Text = "И-М";
             this.filterI_MToolStripMenuItem.Click += new System.EventHandler(this.filterI_MToolStripMenuItem_Click);
             // 
@@ -103,6 +108,7 @@
             // 
             this.filterN_RToolStripMenuItem.Name = "filterN_RToolStripMenuItem";
             this.filterN_RToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.filterN_RToolStripMenuItem.Tag = "5";
             this.filterN_RToolStripMenuItem.Text = "Н-Р";
             this.filterN_RToolStripMenuItem.Click += new System.EventHandler(this.filterN_RToolStripMenuItem_Click);
             // 
@@ -110,6 +116,7 @@
             // 
             this.filterS_FToolStripMenuItem.Name = "filterS_FToolStripMenuItem";
             this.filterS_FToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.filterS_FToolStripMenuItem.Tag = "6";
             this.filterS_FToolStripMenuItem.Text = "С-Ф";
             this.filterS_FToolStripMenuItem.Click += new System.EventHandler(this.filterS_FToolStripMenuItem_Click);
             // 
@@ -117,6 +124,7 @@
             // 
             this.filterKH_SHToolStripMenuItem.Name = "filterKH_SHToolStripMenuItem";
             this.filterKH_SHToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
+            this.filterKH_SHToolStripMenuItem.Tag = "7";
             this.filterKH_SHToolStripMenuItem.Text = "Х-Ш";
             this.filterKH_SHToolStripMenuItem.Click += new System.EventHandler(this.filterKH_SHToolStripMenuItem_Click);
             // 
@@ -124,6 +132,7 @@
             // 
             this.filterSCH_YAToolStripMenuItem.Name = "filterSCH_YAToolStripMenuItem";
             this.filterSCH_YAToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.filterSCH_YAToolStripMenuItem.Tag = "8";
             this.filterSCH_YAToolStripMenuItem.Text = "Щ-Я";
             this.filterSCH_YAToolStripMenuItem.Click += new System.EventHandler(this.filterSCH_YAToolStripMenuItem_Click);
             // 

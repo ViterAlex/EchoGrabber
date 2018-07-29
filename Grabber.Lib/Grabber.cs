@@ -20,7 +20,10 @@ namespace EchoGrabber
             { "Size", ".//a[contains(@class,'download')]//span[@class='size']"},//Размер файла
             { "Duration", ".//a[contains(@class,'listen')]//span[@class='size']"},//Продолжительность
             { "Base", "//div[contains(@class,'mainpreview')]//div[@class='prevcontent']"},//Страница подкаста
-            { "NextPage", "//div[@class='pager']/a[@rel='next']"}//Ссылка на следующую страницу с подкастами
+            { "NextPage", "//div[@class='pager']/a[@rel='next']"},//Ссылка на следующую страницу с подкастами
+            { "Guests", ".//p[@class='author type1']/a//strong[@class='name']"},//Гости передачи
+            { "ProgName", "//div[@class='conthead news']/h1"},//Название передачи в списке программ
+            { "ProgHref", ".//div[@class='title iblock']/h2/a"}//Ссылка на страницу передачи
         };
 
         private static WebClient _client = new WebClient();
@@ -32,6 +35,7 @@ namespace EchoGrabber
             var dt = node.SelectSingleNode(Xpathes["DateTime"])?.Attributes["title"].Value;
             var duration = node.SelectSingleNode(Xpathes["Duration"])?.InnerText.Clean();
             var size = node.SelectSingleNode(Xpathes["Size"])?.InnerText.Clean();
+            var guests = node.SelectSingleNode(Xpathes["Guests"])?.InnerText;
             if (title.IsNullOrEmpty())
             {
                 title = dt;
@@ -42,7 +46,8 @@ namespace EchoGrabber
                 Title = title,
                 Url = url,
                 Duration = duration,
-                Size = size
+                Size = size,
+                Guests = guests
             };
         }
         //Проверка, что на странице есть ссылки на подкасты
@@ -92,8 +97,9 @@ namespace EchoGrabber
         //Получение ссылок на страницы отдельных передач
         public static IEnumerable<PodcastInfo> GetPodcastLinks(string url = "/programs")
         {
-            var doc = GetDocument($"https://echo.msk.ru{url}");
-            var nodes = doc.DocumentNode.SelectNodes("//div[@class='title iblock']/h2/a")
+            url = $"https://echo.msk.ru{url}";
+            var doc = GetDocument(url);
+            var nodes = doc.DocumentNode.SelectNodes(Xpathes["ProgHref"])
                 //TODO:Зависает на получении ссылок. Отсеивание страниц, на которых нет подкастов.
                 //Если селектор Where убрать, то всё работает.
                 //.Where(n => ProgramHasPodcasts(n.Attributes["href"].Value))
@@ -109,7 +115,7 @@ namespace EchoGrabber
         {
             url = $"https://echo.msk.ru{url}";
             var doc = GetDocument(url);
-            return doc.DocumentNode.SelectSingleNode("//div[@class='conthead news']/h1")?.InnerText;
+            return doc.DocumentNode.SelectSingleNode(Xpathes["ProgName"])?.InnerText;
         }
         public static void DownloadAll(string progTitle, string url)
         {
@@ -126,8 +132,8 @@ namespace EchoGrabber
                 {
                     if (issue.Url.IsNullOrEmpty()) continue;
                     var format = issue.Duration.Length > 5 ? "h\\:mm\\:ss" : "mm\\:ss";
-                    var ts = (int)Math.Truncate(TimeSpan.ParseExact(issue.Duration, format, CultureInfo.InvariantCulture).TotalSeconds);
-                    stream.WriteLine($"#EXTINF:{ts},«Эхо Москвы»,{counter++} {issue.Title}");
+                    var seconds = (int)Math.Truncate(TimeSpan.ParseExact(issue.Duration, format, CultureInfo.InvariantCulture).TotalSeconds);
+                    stream.WriteLine($"#EXTINF:{seconds},«Эхо Москвы»,{counter++} {issue.Title}");
                     stream.WriteLine(issue.Url);
                 }
             }

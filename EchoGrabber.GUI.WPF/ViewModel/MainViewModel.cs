@@ -43,7 +43,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 return _filterCommand;
             }
         }
-
+        
         public DelegateCommand<PodcastInfo> ShowPodcastsCommand
         {
             get
@@ -117,7 +117,10 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             Podcasts.Filter = _podcastsFilter;
             Podcasts.Refresh();
         }
-
+        /// <summary>
+        /// Показать содержимое подкаста
+        /// </summary>
+        /// <param name="podcast">Ссылка на экземпляр класса Podcast</param>
         private void ShowPodcasts(PodcastInfo podcast)
         {
             var path = "eg.exe";
@@ -130,7 +133,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private void FilterPodcasts(string filterIndex)
         {
             var index = int.Parse(filterIndex);
-            _podcastsFilter = EchoPrograms.Filters[index];
+            _podcastsFilter = (Predicate<object>)EchoPrograms.Filters[index];
             Podcasts.Filter = _podcastsFilter;
         }
 

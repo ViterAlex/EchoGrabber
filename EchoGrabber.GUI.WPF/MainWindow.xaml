@@ -54,12 +54,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid Margin="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Grid.Column="1">
                 <RadioButton Content="Все"
                              Command="{Binding FilterCommand}"
                              CommandParameter="0"
@@ -89,9 +91,9 @@
                              Command="{Binding FilterCommand}"
                              CommandParameter="8" />
             </StackPanel>
-            <StackPanel HorizontalAlignment="Right"
+            <StackPanel HorizontalAlignment="Left"
                         Orientation="Horizontal"
-                        Grid.Column="1">
+                        Grid.Column="0">
                 <RadioButton Content="Активные"
                              IsChecked="True"
                              Command="{Binding FilterActualCommand}" />
@@ -141,9 +143,16 @@
                     <Button Style="{StaticResource HyperlinkLikeButton}"
                             Content="{Binding Title}"
                             FontWeight="Bold"
-                            Tag="{Binding}">
+                            Tag="{Binding}"
+                            ToolTip="Нажмите правую кнопку мыши для вызова меню действий">
                         <Button.ContextMenu>
                             <ContextMenu>
+                                <ContextMenu.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Margin="-20,0,0,0"
+                                                    Background="White" />
+                                    </ItemsPanelTemplate>
+                                </ContextMenu.ItemsPanel>
                                 <MenuItem Header="Все ссылки"
                                           Command="{StaticResource ShowPodcastsCommandReference}"
                                           CommandParameter="{Binding PlacementTarget.Tag, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />

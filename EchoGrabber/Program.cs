@@ -97,11 +97,21 @@ namespace EchoGrabber
 
                     xmlWr.WriteStartElement("td");
 
+                    //xmlWr.WriteStartElement("p");
                     xmlWr.WriteStartElement("a");
                     xmlWr.WriteAttributeString("href", item.Url);
                     xmlWr.WriteAttributeString("title", $"Скачать подкаст за {item.DateTime}. ({item.Size.Trim()})");
-                    xmlWr.WriteString(item.Title);
+                    xmlWr.WriteString($"{item.Title} ({item.Duration})");
                     xmlWr.WriteEndElement();//a
+                    //xmlWr.WriteEndElement();//p
+
+                    if (!item.Guests.IsNullOrEmpty())
+                    {
+                        xmlWr.WriteRaw("<br>");
+                        //xmlWr.WriteStartElement("p");
+                        xmlWr.WriteString($"Гости: {item.Guests}");
+                        //xmlWr.WriteEndElement();//p
+                    }
 
                     xmlWr.WriteEndElement();//td
 

@@ -6,6 +6,7 @@
         public string DateTime { get; set; }
         public string Size { get; set; }
         public string Duration { get; set; }
+        public string Guests { get; set; }
 
         public override string ToString()
         {

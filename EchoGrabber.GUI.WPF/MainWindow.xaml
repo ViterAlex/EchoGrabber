@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:EchoGrabber.GUI.WPF.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="{StaticResource Title}"
         Icon="pack://application:,,,/Resources/echo.ico"
         Height="450"
         Width="800">
@@ -14,6 +14,45 @@
                              Command="{Binding CreatePlaylistCommand}" />
         <vm:CommandReference x:Key="ShowPodcastsCommandReference"
                              Command="{Binding ShowPodcastsCommand}" />
+        <ContextMenu x:Key="ContextMenu">
+            <ContextMenu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Margin="-20,0,0,0"
+                                Background="White" />
+                </ItemsPanelTemplate>
+            </ContextMenu.ItemsPanel>
+            <MenuItem Header="Все ссылки"
+                      Command="{StaticResource ShowPodcastsCommandReference}"
+                      CommandParameter="{Binding PlacementTarget.Tag, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+            <MenuItem Header="Создать плейлист"
+                      Command="{StaticResource CreatePlaylistCommandReference}"
+                      CommandParameter="{Binding PlacementTarget.Tag,  Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+
+        </ContextMenu>
+        <ControlTemplate x:Key="HyperlinkLikeButtonTemplate"
+                         TargetType="{x:Type Button}">
+            <TextBlock x:Name="innerText"
+                       Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                       Cursor="Hand">
+                                    <ContentPresenter />
+            </TextBlock>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsMouseOver"
+                         Value="true">
+                    <Setter TargetName="innerText"
+                            Property="Foreground"
+                            Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                    <Setter TargetName="innerText"
+                            Property="TextDecorations"
+                            Value="Underline" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <Style x:Key="HyperlinkLikeButton"
+               TargetType="{x:Type Button}">
+            <Setter Property="Template"
+                    Value="{StaticResource HyperlinkLikeButtonTemplate}" />
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.Resources>
@@ -62,38 +101,62 @@
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Grid.Column="1">
-                <RadioButton Content="Все"
+                <RadioButton Content="{StaticResource FilterAll}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="0"
                              IsChecked="True" />
-                <RadioButton Content="1-9"
+                <RadioButton Content="{StaticResource Filter1-9}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="1" />
-                <RadioButton Content="А-Г"
+                <RadioButton Content="{StaticResource FilterA-G}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="2" />
-                <RadioButton Content="Д-З"
+                <RadioButton Content="{StaticResource FilterD-Z}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="3" />
-                <RadioButton Content="И-М"
+                <RadioButton Content="{StaticResource FilterI-M}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="4" />
-                <RadioButton Content="Н-Р"
+                <RadioButton Content="{StaticResource FilterN-R}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="5" />
-                <RadioButton Content="С-Ф"
+                <RadioButton Content="{StaticResource FilterS-F}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="6" />
-                <RadioButton Content="Х-Ш"
+                <RadioButton Content="{StaticResource FilterKh-Sh}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="7" />
-                <RadioButton Content="Щ-Я"
+                <RadioButton Content="{StaticResource FilterSch-Ya}"
                              Command="{Binding FilterCommand}"
                              CommandParameter="8" />
             </StackPanel>
             <StackPanel HorizontalAlignment="Left"
                         Orientation="Horizontal"
                         Grid.Column="0">
+                <!--Доступность интернета-->
+                <Ellipse Width="10"
+                         Height="10"
+                         Margin="0,0,10,0"
+                         Stroke="Black"
+                         StrokeThickness="0.5">
+                    <Ellipse.Style>
+                        <Style TargetType="{x:Type Ellipse}">
+                            <Setter Property="Fill"
+                                    Value="Red" />
+                            <Setter Property="ToolTip"
+                                    Value="Нет связи с интернетом" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Available}"
+                                             Value="True">
+                                    <Setter Property="Fill"
+                                            Value="Green" />
+                                    <Setter Property="ToolTip"
+                                            Value="Есть связь с интернетом" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
                 <RadioButton Content="Активные"
                              IsChecked="True"
                              Command="{Binding FilterActualCommand}" />
@@ -106,32 +169,6 @@
                  Name="listbox"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
-            <ListBox.Resources>
-                <ControlTemplate x:Key="HyperlinkLikeButtonTemplate"
-                                 TargetType="{x:Type Button}">
-                    <TextBlock x:Name="innerText"
-                               Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                               Cursor="Hand">
-                                    <ContentPresenter />
-                    </TextBlock>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Button.IsMouseOver"
-                                 Value="true">
-                            <Setter TargetName="innerText"
-                                    Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                            <Setter TargetName="innerText"
-                                    Property="TextDecorations"
-                                    Value="Underline" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-                <Style x:Key="HyperlinkLikeButton"
-                       TargetType="{x:Type Button}">
-                    <Setter Property="Template"
-                            Value="{StaticResource HyperlinkLikeButtonTemplate}" />
-                </Style>
-            </ListBox.Resources>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True"
@@ -141,29 +178,19 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Button Style="{StaticResource HyperlinkLikeButton}"
-                            Content="{Binding Title}"
                             FontWeight="Bold"
+                            Content="{Binding Title}"
                             Tag="{Binding}"
-                            ToolTip="Нажмите правую кнопку мыши для вызова меню действий">
-                        <Button.ContextMenu>
-                            <ContextMenu>
-                                <ContextMenu.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Margin="-20,0,0,0"
-                                                    Background="White" />
-                                    </ItemsPanelTemplate>
-                                </ContextMenu.ItemsPanel>
-                                <MenuItem Header="Все ссылки"
-                                          Command="{StaticResource ShowPodcastsCommandReference}"
-                                          CommandParameter="{Binding PlacementTarget.Tag, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
-                                <MenuItem Header="Создать плейлист"
-                                          Command="{StaticResource CreatePlaylistCommandReference}"
-                                          CommandParameter="{Binding PlacementTarget.Tag,  Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
-                            </ContextMenu>
-                        </Button.ContextMenu>
+                            ToolTip="Нажмите правую кнопку мыши для вызова меню действий"
+                            ContextMenu="{StaticResource ContextMenu}">
                     </Button>
+                    <!--Content="{Binding Title}"-->
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Viewbox Visibility="{Binding IsUpdating}"
+                 Grid.Row="1">
+            <Label Content="Идёт обновление подкастов..." Foreground="Gray" />
+        </Viewbox>
     </Grid>
 </Window>

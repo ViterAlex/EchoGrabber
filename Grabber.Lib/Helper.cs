@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Web;
 
 namespace EchoGrabber
 {
@@ -16,7 +17,29 @@ namespace EchoGrabber
 
         public static string ToSingleString(this string text)
         {
-            return text.Replace("\r","").Replace("\n", "");
+            return text.Replace("\r", "").Replace("\n", "");
+        }
+
+        public static bool EchoIsOnline
+        {
+            get
+            {
+                var ping = new System.Net.NetworkInformation.Ping();
+                try
+                {
+                    var result = ping.Send("8.8.8.8");
+                    return (result.Status == System.Net.NetworkInformation.IPStatus.Success);
+                }
+                catch (System.Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public static string DecodeHtml(this string html)
+        {
+            return HttpUtility.HtmlDecode(html);
         }
 
     }

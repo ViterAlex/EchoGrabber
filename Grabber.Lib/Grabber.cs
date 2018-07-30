@@ -31,7 +31,7 @@ namespace EchoGrabber
         private static IssueInfo GetIssueInfo(HtmlNode node)
         {
             var url = node.SelectSingleNode(Xpathes["Url"])?.Attributes["href"].Value;
-            var title = node.SelectSingleNode(Xpathes["Title"])?.InnerText;
+            var title = node.SelectSingleNode(Xpathes["Title"])?.InnerText?.DecodeHtml();
             var dt = node.SelectSingleNode(Xpathes["DateTime"])?.Attributes["title"].Value;
             var duration = node.SelectSingleNode(Xpathes["Duration"])?.InnerText.Clean();
             var size = node.SelectSingleNode(Xpathes["Size"])?.InnerText.Clean();
@@ -55,12 +55,13 @@ namespace EchoGrabber
         {
             url = $"https://echo.msk.ru{url}";
             var doc = GetDocument(url);
-
+            if (doc == null) return false;
             var nodes = doc.DocumentNode.SelectNodes(Xpathes["Base"]);
             return nodes != null;
         }
         private static HtmlDocument GetDocument(string url)
         {
+            if (!Helper.EchoIsOnline) return null;
             using (var stream = new StreamReader(_client.OpenRead(url), Encoding.UTF8))
             {
                 var doc = new HtmlDocument();
@@ -74,6 +75,7 @@ namespace EchoGrabber
         {
             url = $"https://echo.msk.ru{url}";
             var doc = GetDocument(url);
+            if (doc == null) yield break;
 
             var nodes = doc.DocumentNode.SelectNodes(Xpathes["Base"])?.Select(n => GetIssueInfo(n));
             if (nodes == null) yield break;//на странице нет подкастов
@@ -99,6 +101,8 @@ namespace EchoGrabber
         {
             url = $"https://echo.msk.ru{url}";
             var doc = GetDocument(url);
+            if (doc == null) return Enumerable.Empty<PodcastInfo>();
+
             var nodes = doc.DocumentNode.SelectNodes(Xpathes["ProgHref"])
                 //TODO:Зависает на получении ссылок. Отсеивание страниц, на которых нет подкастов.
                 //Если селектор Where убрать, то всё работает.
@@ -115,6 +119,7 @@ namespace EchoGrabber
         {
             url = $"https://echo.msk.ru{url}";
             var doc = GetDocument(url);
+            if (doc == null) return string.Empty;
             return doc.DocumentNode.SelectSingleNode(Xpathes["ProgName"])?.InnerText;
         }
         public static void DownloadAll(string progTitle, string url)
@@ -122,13 +127,18 @@ namespace EchoGrabber
             throw new NotImplementedException();
         }
         //Создание плейлиста
-        public static void CreatePlaylist(string filename, string url)
+        public static bool CreatePlaylist(string filename, string url)
         {
+            var podcasts = GetAllPodcastLinks(url).Reverse();
+            if (!podcasts.Any(p => !p.Url.IsNullOrEmpty()))
+            {
+                return false;
+            }
             using (var stream = new StreamWriter(filename))
             {
                 stream.WriteLine("#EXTM3U");
                 var counter = 1;
-                foreach (var issue in GetAllPodcastLinks(url).Reverse())
+                foreach (var issue in podcasts)
                 {
                     if (issue.Url.IsNullOrEmpty()) continue;
                     var format = issue.Duration.Length > 5 ? "h\\:mm\\:ss" : "mm\\:ss";
@@ -137,6 +147,7 @@ namespace EchoGrabber
                     stream.WriteLine(issue.Url);
                 }
             }
+            return true;
         }
     }
 }

@@ -8,6 +8,8 @@ using System.Windows.Input;
 using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using System.Collections.Generic;
+using System.Windows.Threading;
+using System.Linq;
 
 namespace EchoGrabber.GUI.WPF.ViewModel
 {
@@ -16,10 +18,14 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private DelegateCommand _exitCommand;
         private DelegateCommand _filterActualCommand;
         private DelegateCommand _filterArchiveCommand;
+        private DelegateCommand _updateCommand;
         private DelegateCommand<string> _filterCommand;
         private DelegateCommand<PodcastInfo> _showPodcastsCommand;
         private DelegateCommand<PodcastInfo> _createPlaylistCommand;
 
+        private System.Threading.Timer timer;
+        private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+        private string _msgTitle = Application.Current.Resources["Title"].ToString();
         private Predicate<object> _podcastsFilter;
 
         public ICollectionView Podcasts
@@ -32,6 +38,26 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         public static readonly DependencyProperty PodcastsProperty =
             DependencyProperty.Register("Podcasts", typeof(ICollectionView), typeof(MainViewModel), new PropertyMetadata(null));
 
+        public bool Available
+        {
+            get { return (bool)GetValue(AvailableProperty); }
+            set { SetValue(AvailableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Available.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AvailableProperty =
+            DependencyProperty.Register("Available", typeof(bool), typeof(MainViewModel), new PropertyMetadata(false));
+
+        public Visibility IsUpdating
+        {
+            get { return (Visibility)GetValue(IsUpdatingProperty); }
+            set { SetValue(IsUpdatingProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsUpdating.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsUpdatingProperty =
+            DependencyProperty.Register("IsUpdating", typeof(Visibility), typeof(MainViewModel), new PropertyMetadata(Visibility.Hidden));
+
         public DelegateCommand<string> FilterCommand
         {
             get
@@ -43,7 +69,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 return _filterCommand;
             }
         }
-        
+
         public DelegateCommand<PodcastInfo> ShowPodcastsCommand
         {
             get
@@ -79,7 +105,33 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 return _filterArchiveCommand;
             }
         }
-        
+
+        public DelegateCommand UpdateCommand
+        {
+            get
+            {
+                if (_updateCommand == null)
+                {
+                    _updateCommand = new DelegateCommand(Update);
+                }
+                return _updateCommand;
+            }
+        }
+
+        //TODO:Автообновление при возобновлении связи
+        private void Update()
+        {
+            Dispatcher.Invoke(() => IsUpdating = Visibility.Visible);
+            EchoPrograms.Actual = Grabber.GetPodcastLinks().ToList();
+            EchoPrograms.Archived = Grabber.GetPodcastLinks("/programs/archived").ToList();
+            Dispatcher.Invoke(() =>
+            {
+                IsUpdating = Visibility.Hidden;
+                Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Actual);
+            });
+
+        }
+
         public DelegateCommand<PodcastInfo> CreatePlaylistCommand
         {
             get
@@ -99,8 +151,23 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 dialog.Filter = "Плейлисты|*.m3u";
                 dialog.FileName = $"{podcast.Title}";
                 if (dialog.ShowDialog() != DialogResult.OK) return;
-                Grabber.CreatePlaylist(dialog.FileName, podcast.Url);
-                MessageBox.Show("Плейлист создан");
+                var result = Grabber.CreatePlaylist(dialog.FileName, podcast.Url);
+                if (!result)
+                {
+                    CreatePlaylistFailed(podcast);
+                    return;
+                }
+                MessageBox.Show("Плейлист создан!", _msgTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void CreatePlaylistFailed(PodcastInfo podcast)
+        {
+            var result = MessageBox.Show($"Не удалось создать плейлист для программы \"{podcast.Title}\".\r\n" +
+                $" Открыть страницу программы в браузере?", _msgTitle, MessageBoxButton.YesNo, MessageBoxImage.Error);
+            if (result == MessageBoxResult.Yes)
+            {
+                Process.Start($"https://echo.msk.ru{podcast.Url}");
             }
         }
 
@@ -133,7 +200,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private void FilterPodcasts(string filterIndex)
         {
             var index = int.Parse(filterIndex);
-            _podcastsFilter = (Predicate<object>)EchoPrograms.Filters[index];
+            _podcastsFilter = EchoPrograms.Filters[index];
             Podcasts.Filter = _podcastsFilter;
         }
 
@@ -142,10 +209,33 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         public MainViewModel()
         {
-            Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Actual);
+            Available = Helper.EchoIsOnline;
+            Update();
+            StartTimer();
         }
 
         #endregion
+        private void timer_callback(object state)
+        {
+            var result = Helper.EchoIsOnline;
+            _dispatcher.Invoke(() =>  Available = result);
+            if ((EchoPrograms.Actual.Count == 0 || EchoPrograms.Archived.Count == 0) && result)
+            {
+                StopTimer();
+                Update();
+                StartTimer();
+            }
+        }
+
+        private void StartTimer()
+        {
+            timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
+        }
+
+        private void StopTimer()
+        {
+            timer.Dispose();
+        }
 
         public ICommand ExitCommand
         {

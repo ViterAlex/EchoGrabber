@@ -31,7 +31,7 @@ namespace EchoGrabber
         private static IssueInfo GetIssueInfo(HtmlNode node)
         {
             var url = node.SelectSingleNode(Xpathes["Url"])?.Attributes["href"].Value;
-            var title = node.SelectSingleNode(Xpathes["Title"])?.InnerText?.DecodeHtml();
+            var title = node.SelectSingleNode(Xpathes["Title"])?.InnerText?.Clean();
             var dt = node.SelectSingleNode(Xpathes["DateTime"])?.Attributes["title"].Value;
             var duration = node.SelectSingleNode(Xpathes["Duration"])?.InnerText.Clean();
             var size = node.SelectSingleNode(Xpathes["Size"])?.InnerText.Clean();

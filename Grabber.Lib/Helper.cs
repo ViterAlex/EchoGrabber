@@ -7,7 +7,7 @@ namespace EchoGrabber
     {
         public static string Clean(this string text)
         {
-            return Regex.Replace(text, @"[\r\n\t]+", "");
+            return Regex.Replace(text, @"[\r\n\t]+", "").DecodeHtml();
         }
 
         public static bool IsNullOrEmpty(this string text)

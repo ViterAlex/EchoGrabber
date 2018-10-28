@@ -14,16 +14,16 @@ namespace EchoGrabber
         //xpath для отдельных элементов страницы
         private static readonly Dictionary<string, string> Xpathes = new Dictionary<string, string>()
         {
-            { "Url", ".//a[@class='download iblock']"},//Ссылка на mp3
-            { "Title", ".//*[@class='title type2']"},//Название подкаста
-            { "DateTime", ".//*[@class='datetime']"},//Дата выхода
-            { "Size", ".//a[contains(@class,'download')]//span[@class='size']"},//Размер файла
-            { "Duration", ".//a[contains(@class,'listen')]//span[@class='size']"},//Продолжительность
             { "Base", "//div[contains(@class,'mainpreview')]//div[@class='prevcontent']"},//Страница подкаста
-            { "NextPage", "//div[@class='pager']/a[@rel='next']"},//Ссылка на следующую страницу с подкастами
+            { "DateTime", ".//*[@class='datetime']"},//Дата выхода
+            { "Duration", ".//a[contains(@class,'listen')]//span[@class='size']"},//Продолжительность
             { "Guests", ".//p[@class='author type1']/a//strong[@class='name']"},//Гости передачи
+            { "NextPage", "//div[@class='pager']/a[@rel='next']"},//Ссылка на следующую страницу с подкастами
             { "ProgName", "//div[@class='conthead news']/h1"},//Название передачи в списке программ
-            { "ProgHref", ".//div[@class='title iblock']/h2/a"}//Ссылка на страницу передачи
+            { "ProgHref", ".//div[@class='title iblock']/h2/a"},//Ссылка на страницу передачи
+            { "Size", ".//a[contains(@class,'download')]//span[@class='size']"},//Размер файла
+            { "Title", ".//*[@class='title type2']"},//Название подкаста
+            { "Url", ".//a[@class='download iblock']"},//Ссылка на mp3
         };
 
         private static WebClient _client = new WebClient();

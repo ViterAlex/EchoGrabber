@@ -10,103 +10,32 @@
         Height="450"
         Width="800">
     <Window.Resources>
-        <!--Команды контекстного меню-->
-        <vm:CommandReference x:Key="CreatePlaylistCommandReference"
-                             Command="{Binding CreatePlaylistCommand}" />
-        <vm:CommandReference x:Key="ShowPodcastsCommandReference"
-                             Command="{Binding ShowPodcastsCommand}" />
-        <vm:CommandReference x:Key="UpdateCommandReference"
-                             Command="{Binding UpdateCommand}" />
-        <!--Контекстное меню-->
-        <ContextMenu x:Key="ContextMenu">
-            <ContextMenu.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Margin="-20,0,0,0"
-                                Background="White" />
-                </ItemsPanelTemplate>
-            </ContextMenu.ItemsPanel>
-            <MenuItem Header="{StaticResource LinksOnOnePage}"
-                      Command="{StaticResource ShowPodcastsCommandReference}"
-                      CommandParameter="{Binding PlacementTarget.Tag, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
-            <MenuItem Header="{StaticResource CreatePlaylist}"
-                      Command="{StaticResource CreatePlaylistCommandReference}"
-                      CommandParameter="{Binding PlacementTarget.Tag,  Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
-            <MenuItem Header="{StaticResource Update}"
-                      Command="{StaticResource UpdateCommandReference}" />
-        </ContextMenu>
-        <!--Внешний вид кнопки-->
-        <ControlTemplate x:Key="HyperlinkLikeButtonTemplate"
-                         TargetType="{x:Type Button}">
-            <TextBlock x:Name="innerText"
-                       Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                       Cursor="Hand">
-                                    <ContentPresenter />
-            </TextBlock>
-            <ControlTemplate.Triggers>
-                <Trigger Property="Button.IsMouseOver"
-                         Value="true">
-                    <Setter TargetName="innerText"
-                            Property="Foreground"
-                            Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                    <Setter TargetName="innerText"
-                            Property="TextDecorations"
-                            Value="Underline" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <Style x:Key="HyperlinkLikeButton"
-               TargetType="{x:Type Button}">
-            <Setter Property="Template"
-                    Value="{StaticResource HyperlinkLikeButtonTemplate}" />
-        </Style>
-        <!--Рамка об отсутствии интернета-->
-        <Style x:Key="BorderStyle"
-               TargetType="{x:Type Border}">
-            <Setter Property="BorderThickness"
-                    Value="2" />
-            <Setter Property="BorderBrush"
-                    Value="Red" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Available}"
-                             Value="True">
-                    <Setter Property="BorderThickness"
-                            Value="0" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="FrameworkElement">
-            <Setter Property="Margin"
-                    Value="3" />
-        </Style>
-        <!--Внешний вид кнопок фильтров-->
-        <ControlTemplate x:Key="RadioButtonTemplate"
-                         TargetType="ToggleButton">
-            <TextBlock x:Name="innerText"
-                       Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
-                       Cursor="Hand">
-                                    <ContentPresenter />
-            </TextBlock>
-            <ControlTemplate.Triggers>
-                <Trigger Property="ToggleButton.IsChecked"
-                         Value="True">
-                    <Setter TargetName="innerText"
-                            Property="TextDecorations"
-                            Value="Underline" />
-                    <Setter TargetName="innerText"
-                            Property="FontWeight"
-                            Value="Bold" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <Style TargetType="RadioButton"
-               BasedOn="{StaticResource {x:Type ToggleButton}}">
-            <Setter Property="Margin"
-                    Value="3" />
-            <Setter Property="Padding"
-                    Value="10,3" />
-            <Setter Property="Template"
-                    Value="{StaticResource RadioButtonTemplate}" />
-        </Style>
+        <ResourceDictionary>
+            <!--Команды контекстного меню-->
+            <vm:CommandReference x:Key="CreatePlaylistCommandReference"
+                                 Command="{Binding CreatePlaylistCommand}" />
+            <vm:CommandReference x:Key="ShowPodcastsCommandReference"
+                                 Command="{Binding ShowPodcastsCommand}" />
+            <vm:CommandReference x:Key="UpdateCommandReference"
+                                 Command="{Binding UpdateCommand}" />
+            <!--Контекстное меню-->
+            <ContextMenu x:Key="ContextMenu">
+                <ContextMenu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Margin="-20,0,0,0"
+                                    Background="White" />
+                    </ItemsPanelTemplate>
+                </ContextMenu.ItemsPanel>
+                <MenuItem Header="{StaticResource LinksOnOnePage}"
+                          Command="{StaticResource ShowPodcastsCommandReference}"
+                          CommandParameter="{Binding PlacementTarget.Tag, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                <MenuItem Header="{StaticResource CreatePlaylist}"
+                          Command="{StaticResource CreatePlaylistCommandReference}"
+                          CommandParameter="{Binding PlacementTarget.Tag,  Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                <MenuItem Header="{StaticResource Update}"
+                          Command="{StaticResource UpdateCommandReference}" />
+            </ContextMenu>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Border Style="{StaticResource BorderStyle}">

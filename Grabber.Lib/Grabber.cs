@@ -137,13 +137,13 @@ namespace EchoGrabber
             using (var stream = new StreamWriter(filename))
             {
                 stream.WriteLine("#EXTM3U");
-                var counter = 1;
+                var counter = 0;
                 foreach (var issue in podcasts)
                 {
                     if (issue.Url.IsNullOrEmpty()) continue;
                     var format = issue.Duration.Length > 5 ? "h\\:mm\\:ss" : "mm\\:ss";
                     var seconds = (int)Math.Truncate(TimeSpan.ParseExact(issue.Duration, format, CultureInfo.InvariantCulture).TotalSeconds);
-                    stream.WriteLine($"#EXTINF:{seconds},«Эхо Москвы»,{counter++} {issue.Title}");
+                    stream.WriteLine($"#EXTINF:{seconds},«Эхо Москвы»,{++counter} {issue.Title}");
                     stream.WriteLine(issue.Url);
                 }
             }

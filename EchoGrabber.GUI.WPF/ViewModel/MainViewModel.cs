@@ -23,7 +23,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private DelegateCommand<PodcastInfo> _showPodcastsCommand;
         private DelegateCommand<PodcastInfo> _createPlaylistCommand;
 
-        private System.Threading.Timer timer;
+        private System.Threading.Timer _timer;
         private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
         private string _msgTitle = Application.Current.Resources["Title"].ToString();
         private Predicate<object> _podcastsFilter;
@@ -58,27 +58,16 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         public static readonly DependencyProperty IsUpdatingProperty =
             DependencyProperty.Register("IsUpdating", typeof(Visibility), typeof(MainViewModel), new PropertyMetadata(Visibility.Hidden));
 
-        public DelegateCommand<string> FilterCommand
+        #region Команды
+        public DelegateCommand<PodcastInfo> CreatePlaylistCommand
         {
             get
             {
-                if (_filterCommand == null)
+                if (_createPlaylistCommand == null)
                 {
-                    _filterCommand = new DelegateCommand<string>(FilterPodcasts);
+                    _createPlaylistCommand = new DelegateCommand<PodcastInfo>(CreatePlaylist, CanExecute);
                 }
-                return _filterCommand;
-            }
-        }
-
-        public DelegateCommand<PodcastInfo> ShowPodcastsCommand
-        {
-            get
-            {
-                if (_showPodcastsCommand == null)
-                {
-                    _showPodcastsCommand = new DelegateCommand<PodcastInfo>(ShowPodcasts);
-                }
-                return _showPodcastsCommand;
+                return _createPlaylistCommand;
             }
         }
 
@@ -106,6 +95,30 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             }
         }
 
+        public DelegateCommand<string> FilterCommand
+        {
+            get
+            {
+                if (_filterCommand == null)
+                {
+                    _filterCommand = new DelegateCommand<string>(FilterPodcasts);
+                }
+                return _filterCommand;
+            }
+        }
+
+        public DelegateCommand<PodcastInfo> ShowPodcastsCommand
+        {
+            get
+            {
+                if (_showPodcastsCommand == null)
+                {
+                    _showPodcastsCommand = new DelegateCommand<PodcastInfo>(ShowPodcasts, CanExecute);
+                }
+                return _showPodcastsCommand;
+            }
+        }
+
         public DelegateCommand UpdateCommand
         {
             get
@@ -117,10 +130,16 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 return _updateCommand;
             }
         }
+        #endregion
 
-        //TODO:Автообновление при возобновлении связи
+        private bool CanExecute(PodcastInfo p)
+        {
+            return EchoPrograms.Actual.Count != 0 && EchoPrograms.Archived.Count != 0;
+        }
+
         private void Update()
         {
+            StopTimer();
             Dispatcher.Invoke(() => IsUpdating = Visibility.Visible);
             EchoPrograms.Actual = Grabber.GetPodcastLinks().ToList();
             EchoPrograms.Archived = Grabber.GetPodcastLinks("/programs/archived").ToList();
@@ -129,19 +148,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 IsUpdating = Visibility.Hidden;
                 Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Actual);
             });
-
-        }
-
-        public DelegateCommand<PodcastInfo> CreatePlaylistCommand
-        {
-            get
-            {
-                if (_createPlaylistCommand == null)
-                {
-                    _createPlaylistCommand = new DelegateCommand<PodcastInfo>(CreatePlaylist);
-                }
-                return _createPlaylistCommand;
-            }
+            StartTimer();
         }
 
         private void CreatePlaylist(PodcastInfo podcast)
@@ -218,23 +225,21 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private void timer_callback(object state)
         {
             var result = Helper.EchoIsOnline;
-            _dispatcher.Invoke(() =>  Available = result);
+            _dispatcher.Invoke(() => Available = result);
             if ((EchoPrograms.Actual.Count == 0 || EchoPrograms.Archived.Count == 0) && result)
             {
-                StopTimer();
                 Update();
-                StartTimer();
             }
         }
 
         private void StartTimer()
         {
-            timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
+            _timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
         }
 
         private void StopTimer()
         {
-            timer.Dispose();
+            _timer?.Dispose();
         }
 
         public ICommand ExitCommand

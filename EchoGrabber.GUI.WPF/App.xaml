@@ -7,6 +7,9 @@
         <clr:String x:Key="Title">Граббер подкастов «Эха Москвы»</clr:String>
         <clr:String x:Key="ActivePodcastsTitle">Активные</clr:String>
         <clr:String x:Key="ArchivedPodcastsTitle">Архивные</clr:String>
+        <clr:String x:Key="LinksOnOnePage">Все ссылки</clr:String>
+        <clr:String x:Key="CreatePlaylist">Создать плейлист</clr:String>
+        <clr:String x:Key="Update">Обновить</clr:String>
         <clr:String x:Key="FilterAll">Все</clr:String>
         <clr:String x:Key="Filter1-9">1-9</clr:String>
         <clr:String x:Key="FilterA-G">А-Г</clr:String>

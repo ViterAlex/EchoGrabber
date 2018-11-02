@@ -8,6 +8,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ImageBrush x:Key="SplashBackground"
+                        ImageSource="pack://application:,,,/Resources/echo_logo.png"
+                        Stretch="Fill" />
+            <BitmapImage x:Key="ProgramIcon"
+                         UriSource="pack://application:,,,/Resources/echo.ico" />
+            <BitmapImage x:Key="HtmlImage"
+                         UriSource="pack://application:,,,/Resources/html.png" />
+            <BitmapImage x:Key="PlayListImage"
+                         UriSource="pack://application:,,,/Resources/m3u.png" />
             <clr:String x:Key="Title">Граббер подкастов «Эха Москвы»</clr:String>
             <clr:String x:Key="ActivePodcastsTitle">Активные</clr:String>
             <clr:String x:Key="ArchivedPodcastsTitle">Архивные</clr:String>

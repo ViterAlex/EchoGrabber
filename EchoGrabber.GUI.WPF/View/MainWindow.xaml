@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:EchoGrabber.GUI.WPF.ViewModel"
         mc:Ignorable="d"
-        Title="{StaticResource Title}"
-        Icon="pack://application:,,,/Resources/echo.ico"
         Height="450"
+        Icon="{StaticResource ProgramIcon}"
+        Title="{StaticResource Title}"
         Width="800">
     <Window.Resources>
         <ResourceDictionary>
@@ -44,14 +44,41 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Margin="3">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Grid.Column="1">
+                <StackPanel Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            Orientation="Horizontal">
+                    <RadioButton Content="Активные"
+                                 IsChecked="True"
+                                 Command="{Binding FilterActualCommand}" />
+                    <RadioButton Content="Архив"
+                                 Command="{Binding FilterArchiveCommand}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Button MaxHeight="32"
+                            Style="{StaticResource HyperlinkLikeButton}"
+                            ToolTip="{StaticResource LinksOnOnePage}"
+                            Command="{StaticResource ShowPodcastsCommandReference}">
+                        <Image Source="{StaticResource HtmlImage}"
+                               Stretch="Fill" />
+                    </Button>
+                    <Button MaxHeight="32"
+                            Style="{StaticResource HyperlinkLikeButton}"
+                            ToolTip="{StaticResource CreatePlaylist}">
+                        <Image Source="{StaticResource PlayListImage}"
+                               Stretch="Fill" />
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
                     <RadioButton Content="{StaticResource FilterAll}"
                                  Command="{Binding FilterCommand}"
                                  CommandParameter="0"
@@ -81,28 +108,32 @@
                                  Command="{Binding FilterCommand}"
                                  CommandParameter="8" />
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Left"
-                            Orientation="Horizontal"
-                            Grid.Column="0">
-                    <RadioButton Content="Активные"
-                                 IsChecked="True"
-                                 Command="{Binding FilterActualCommand}" />
-                    <RadioButton Content="Архив"
-                                 Command="{Binding FilterArchiveCommand}" />
-                </StackPanel>
             </Grid>
-            <ListBox ItemsSource="{Binding Podcasts}"
-                     Grid.Row="1"
-                     Name="listbox"
-                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                     ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <ListBox.ItemsPanel>
+            
+            <ListView ItemsSource="{Binding Podcasts}"
+                      Grid.Row="1"
+                      Name="listbox"
+                      IsSynchronizedWithCurrentItem="True"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ListView.Resources>
+                    <Style TargetType="ListViewItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsKeyboardFocusWithin"
+                                     Value="True">
+                                <Setter Property="IsSelected"
+                                        Value="True" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Resources>
+                <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel IsItemsHost="True"
                                    Orientation="Vertical" />
                     </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
                     <DataTemplate>
                         <Button Style="{StaticResource HyperlinkLikeButton}"
                                 FontWeight="Bold"
@@ -112,10 +143,12 @@
                                 ContextMenu="{StaticResource ContextMenu}">
                         </Button>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </ListView.ItemTemplate>
+            </ListView>
             <Viewbox Visibility="{Binding IsUpdating}"
-                     Grid.Row="1">
+                     Grid.Row="1"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch">
                 <Label Content="Идёт обновление подкастов..."
                        Foreground="Gray" />
             </Viewbox>

@@ -10,6 +10,7 @@ using Application = System.Windows.Application;
 using System.Collections.Generic;
 using System.Windows.Threading;
 using System.Linq;
+using EchoGrabber.GUI.WPF.View;
 
 namespace EchoGrabber.GUI.WPF.ViewModel
 {
@@ -57,6 +58,17 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         // Using a DependencyProperty as the backing store for IsUpdating.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsUpdatingProperty =
             DependencyProperty.Register("IsUpdating", typeof(Visibility), typeof(MainViewModel), new PropertyMetadata(Visibility.Hidden));
+
+        public int SelectedIndex
+        {
+            get { return (int)GetValue(SelectedIndexProperty); }
+            set { SetValue(SelectedIndexProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedPodcast.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedIndexProperty =
+            DependencyProperty.Register("SelectedIndex", typeof(int), typeof(MainViewModel), new PropertyMetadata(-1));
+
 
         #region Команды
         public DelegateCommand<PodcastInfo> CreatePlaylistCommand
@@ -140,9 +152,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private void Update()
         {
             StopTimer();
-            Dispatcher.Invoke(() => IsUpdating = Visibility.Visible);
-            EchoPrograms.Actual = Grabber.GetPodcastLinks().ToList();
-            EchoPrograms.Archived = Grabber.GetPodcastLinks("/programs/archived").ToList();
+            //Dispatcher.Invoke(() => IsUpdating = Visibility.Visible);
             Dispatcher.Invoke(() =>
             {
                 IsUpdating = Visibility.Hidden;
@@ -158,6 +168,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 dialog.Filter = "Плейлисты|*.m3u";
                 dialog.FileName = $"{podcast.Title}";
                 if (dialog.ShowDialog() != DialogResult.OK) return;
+
                 var result = Grabber.CreatePlaylist(dialog.FileName, podcast.Url);
                 if (!result)
                 {
@@ -192,16 +203,16 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             Podcasts.Refresh();
         }
         /// <summary>
-        /// Показать содержимое подкаста
+        /// Показать содержимое подкаста в виде html-страницы
         /// </summary>
         /// <param name="podcast">Ссылка на экземпляр класса Podcast</param>
         private void ShowPodcasts(PodcastInfo podcast)
         {
-            var path = "eg.exe";
-#if DEBUG
-            path = System.IO.Path.GetFullPath("../../../EchoGrabber/bin/Debug/eg.exe");
-#endif
-            Process.Start($"{path}", $"{podcast.Url}");
+            var sw = new StatusWindow(podcast.Url)
+            {
+                ShowCancelButton = Visibility.Hidden
+            };
+            sw.ShowDialog();
         }
 
         private void FilterPodcasts(string filterIndex)

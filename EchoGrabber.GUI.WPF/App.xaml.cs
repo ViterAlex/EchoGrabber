@@ -29,7 +29,7 @@ namespace EchoGrabber.GUI.WPF
             };
         }
 
-        internal Action<SplashWindow> ApplicationInitialize;
+        internal Action<StatusWindow> ApplicationInitialize;
 
         public static new App Current
         {

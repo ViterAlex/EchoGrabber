@@ -18,7 +18,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Загрузка списка передач..."
+        <Label Content="Загрузка списка подкастов..."
                x:Name="descrLabel"
                VerticalAlignment="Top"
                Margin="3"
@@ -28,7 +28,7 @@
                      Height="3"
                      Margin="3"
                      VerticalAlignment="Bottom"
-                     Foreground="#ED1C24"
+                     Foreground="#6F7173"
                      Background="Transparent"
                      BorderThickness="0"
                      BorderBrush="Transparent"

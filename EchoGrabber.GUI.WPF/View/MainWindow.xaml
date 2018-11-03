@@ -19,7 +19,7 @@
             <vm:CommandReference x:Key="UpdateCommandReference"
                                  Command="{Binding UpdateCommand}" />
             <!--Контекстное меню-->
-            <ContextMenu x:Key="ContextMenu">
+            <!--<ContextMenu x:Key="ContextMenu">
                 <ContextMenu.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Margin="-20,0,0,0"
@@ -34,7 +34,7 @@
                           CommandParameter="{Binding PlacementTarget.Tag,  Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}" />
                 <MenuItem Header="{StaticResource Update}"
                           Command="{StaticResource UpdateCommandReference}" />
-            </ContextMenu>
+            </ContextMenu>-->
         </ResourceDictionary>
     </Window.Resources>
 
@@ -65,13 +65,16 @@
                     <Button MaxHeight="32"
                             Style="{StaticResource HyperlinkLikeButton}"
                             ToolTip="{StaticResource LinksOnOnePage}"
-                            Command="{StaticResource ShowPodcastsCommandReference}">
+                            Command="{StaticResource ShowPodcastsCommandReference}"
+                            CommandParameter="{Binding ElementName=listbox, Path=SelectedValue}">
                         <Image Source="{StaticResource HtmlImage}"
                                Stretch="Fill" />
                     </Button>
                     <Button MaxHeight="32"
                             Style="{StaticResource HyperlinkLikeButton}"
-                            ToolTip="{StaticResource CreatePlaylist}">
+                            ToolTip="{StaticResource CreatePlaylist}"
+                            Command="{StaticResource CreatePlaylistCommandReference}"
+                            CommandParameter="{Binding ElementName=listbox, Path=SelectedValue}">
                         <Image Source="{StaticResource PlayListImage}"
                                Stretch="Fill" />
                     </Button>
@@ -109,7 +112,7 @@
                                  CommandParameter="8" />
                 </StackPanel>
             </Grid>
-            
+
             <ListView ItemsSource="{Binding Podcasts}"
                       Grid.Row="1"
                       Name="listbox"
@@ -118,13 +121,8 @@
                       ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListView.Resources>
                     <Style TargetType="ListViewItem">
-                        <Style.Triggers>
-                            <Trigger Property="IsKeyboardFocusWithin"
-                                     Value="True">
-                                <Setter Property="IsSelected"
-                                        Value="True" />
-                            </Trigger>
-                        </Style.Triggers>
+                        <Setter Property="Margin"
+                                Value="1" />
                     </Style>
                 </ListView.Resources>
                 <ListView.ItemsPanel>
@@ -135,13 +133,9 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Button Style="{StaticResource HyperlinkLikeButton}"
-                                FontWeight="Bold"
-                                Content="{Binding Title}"
-                                Tag="{Binding}"
-                                ToolTip="Нажмите правую кнопку мыши для вызова меню действий"
-                                ContextMenu="{StaticResource ContextMenu}">
-                        </Button>
+                        <Label Content="{Binding Title}"
+                               Margin="2"
+                               Tag="{Binding}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

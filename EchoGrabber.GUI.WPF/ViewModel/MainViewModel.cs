@@ -59,17 +59,6 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         public static readonly DependencyProperty IsUpdatingProperty =
             DependencyProperty.Register("IsUpdating", typeof(Visibility), typeof(MainViewModel), new PropertyMetadata(Visibility.Hidden));
 
-        public int SelectedIndex
-        {
-            get { return (int)GetValue(SelectedIndexProperty); }
-            set { SetValue(SelectedIndexProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for SelectedPodcast.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedIndexProperty =
-            DependencyProperty.Register("SelectedIndex", typeof(int), typeof(MainViewModel), new PropertyMetadata(-1));
-
-
         #region Команды
         public DelegateCommand<PodcastInfo> CreatePlaylistCommand
         {
@@ -146,7 +135,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         private bool CanExecute(PodcastInfo p)
         {
-            return EchoPrograms.Actual.Count != 0 && EchoPrograms.Archived.Count != 0;
+            return EchoPrograms.Actual.Count != 0 && EchoPrograms.Archived.Count != 0 && Podcasts.CurrentItem != null;
         }
 
         private void Update()

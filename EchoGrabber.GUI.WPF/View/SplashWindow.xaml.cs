@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -75,6 +76,7 @@ namespace EchoGrabber.GUI.WPF.View
         internal void CreateHtml(string name, string url)
         {
             var filename = $"{url.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1]}.html";
+            filename = Path.Combine(Environment.GetEnvironmentVariable("temp"), filename);
             Grabber.LinkProcessed += (s, e) =>
             {
                 Dispatcher.Invoke(() => descrLabel.Content = $"«{name}». Выпусков: {e}");

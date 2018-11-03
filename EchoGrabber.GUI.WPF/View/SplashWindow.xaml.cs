@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EchoGrabber.GUI.WPF.Model;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace EchoGrabber.GUI.WPF.View
             Loaded += SplashWindow_Loaded;
         }
 
-        public StatusWindow(string url)
+        public StatusWindow(string url, BrowserInfo bi)
         {
             InitializeComponent();
             DataContext = this;
@@ -30,7 +31,7 @@ namespace EchoGrabber.GUI.WPF.View
             {
                 var name = await Task.Factory.StartNew(() => Grabber.GetProgramName(url).Trim());
                 descrLabel.Content = $"«{name.Trim()}»";
-                await Task.Factory.StartNew(() => CreateHtml(name, url));
+                await Task.Factory.StartNew(() => CreateHtml(name, url, bi));
                 Close();
             };
         }
@@ -73,7 +74,7 @@ namespace EchoGrabber.GUI.WPF.View
             Application.Current.Shutdown();
         }
 
-        internal void CreateHtml(string name, string url)
+        internal void CreateHtml(string name, string url, BrowserInfo bi)
         {
             var filename = $"{url.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1]}.html";
             filename = Path.Combine(Environment.GetEnvironmentVariable("temp"), filename);
@@ -82,7 +83,7 @@ namespace EchoGrabber.GUI.WPF.View
                 Dispatcher.Invoke(() => descrLabel.Content = $"«{name}». Выпусков: {e}");
             };
             Grabber.CreateHtml(filename, url);
-            Process.Start(filename);
+            Process.Start(bi.StartupPath, filename);
         }
     }
 }

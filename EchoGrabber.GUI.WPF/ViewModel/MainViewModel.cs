@@ -9,8 +9,8 @@ using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using System.Collections.Generic;
 using System.Windows.Threading;
-using System.Linq;
 using EchoGrabber.GUI.WPF.View;
+using EchoGrabber.GUI.WPF.Model;
 
 namespace EchoGrabber.GUI.WPF.ViewModel
 {
@@ -28,6 +28,16 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
         private string _msgTitle = Application.Current.Resources["Title"].ToString();
         private Predicate<object> _podcastsFilter;
+
+        public ICollectionView Browsers
+        {
+            get { return (ICollectionView)GetValue(BrowsersProperty); }
+            set { SetValue(BrowsersProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Browsers.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BrowsersProperty =
+            DependencyProperty.Register("Browsers", typeof(ICollectionView), typeof(MainViewModel), new PropertyMetadata(null));
 
         public ICollectionView Podcasts
         {
@@ -146,6 +156,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             {
                 IsUpdating = Visibility.Hidden;
                 Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Actual);
+                Browsers = CollectionViewSource.GetDefaultView(OsTools.GetBrowsers());
             });
             StartTimer();
         }
@@ -197,7 +208,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         /// <param name="podcast">Ссылка на экземпляр класса Podcast</param>
         private void ShowPodcasts(PodcastInfo podcast)
         {
-            var sw = new StatusWindow(podcast.Url)
+            var sw = new StatusWindow(podcast.Url, Browsers.CurrentItem as BrowserInfo)
             {
                 ShowCancelButton = Visibility.Hidden
             };

@@ -2,12 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:clr="clr-namespace:System;assembly=mscorlib"
+             xmlns:model="clr-namespace:EchoGrabber.GUI.WPF.Model"
              StartupUri="View/SplashWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <model:IconConverter x:Key="IconConverter" />
+            <model:DefaultBrowserIndexConverter x:Key="DefaultBrowserIndexConverter"/>
             <ImageBrush x:Key="SplashBackground"
                         ImageSource="pack://application:,,,/Resources/echo_logo.png"
                         Stretch="Fill" />

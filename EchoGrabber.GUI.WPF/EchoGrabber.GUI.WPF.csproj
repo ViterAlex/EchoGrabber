@@ -58,6 +58,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\BrowserInfo.cs" />
+    <Compile Include="Model\DefaultBrowserIndexConverter.cs" />
+    <Compile Include="Model\IconConverter.cs" />
+    <Compile Include="Model\IconExtensions.cs" />
+    <Compile Include="Model\OsTools.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -114,9 +119,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\EchoGrabber\EchoGrabber.csproj">
       <Project>{affbe42d-1c13-4555-8527-28b5ba5c3cbd}</Project>

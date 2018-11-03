@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EchoGrabber.GUI.Properties
+namespace EchoGrabber.Download.Properties
 {
 
 

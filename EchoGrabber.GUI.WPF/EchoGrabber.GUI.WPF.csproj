@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>echo.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\echo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -121,10 +121,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\EchoGrabber\EchoGrabber.csproj">
-      <Project>{affbe42d-1c13-4555-8527-28b5ba5c3cbd}</Project>
-      <Name>EchoGrabber</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Grabber.Lib\Grabber.Lib.csproj">
       <Project>{3283e46a-801e-437b-b591-3e4b9d896583}</Project>
       <Name>Grabber.Lib</Name>
@@ -135,9 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\echo_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="echo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

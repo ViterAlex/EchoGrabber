@@ -10,7 +10,7 @@ using Application = System.Windows.Application;
 using System.Collections.Generic;
 using System.Windows.Threading;
 using EchoGrabber.GUI.WPF.View;
-using EchoGrabber.GUI.WPF.Model;
+using EchoGrabber.GUI.WPF.Helpers;
 
 namespace EchoGrabber.GUI.WPF.ViewModel
 {
@@ -124,7 +124,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             {
                 if (_showPodcastsCommand == null)
                 {
-                    _showPodcastsCommand = new DelegateCommand<PodcastInfo>(ShowPodcasts, CanExecute);
+                    _showPodcastsCommand = new DelegateCommand<PodcastInfo>(PodcastnOnHtmlPage, CanExecute);
                 }
                 return _showPodcastsCommand;
             }
@@ -151,7 +151,6 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private void Update()
         {
             StopTimer();
-            //Dispatcher.Invoke(() => IsUpdating = Visibility.Visible);
             Dispatcher.Invoke(() =>
             {
                 IsUpdating = Visibility.Hidden;
@@ -185,7 +184,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
                 $" Открыть страницу программы в браузере?", _msgTitle, MessageBoxButton.YesNo, MessageBoxImage.Error);
             if (result == MessageBoxResult.Yes)
             {
-                Process.Start($"https://echo.msk.ru{podcast.Url}");
+                Process.Start((Browsers.CurrentItem as BrowserInfo).StartupPath, $"https://echo.msk.ru{podcast.Url}");
             }
         }
 
@@ -206,7 +205,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         /// Показать содержимое подкаста в виде html-страницы
         /// </summary>
         /// <param name="podcast">Ссылка на экземпляр класса Podcast</param>
-        private void ShowPodcasts(PodcastInfo podcast)
+        private void PodcastnOnHtmlPage(PodcastInfo podcast)
         {
             var sw = new StatusWindow(podcast.Url, Browsers.CurrentItem as BrowserInfo)
             {
@@ -229,10 +228,28 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         {
             Available = Helper.EchoIsOnline;
             Update();
-            StartTimer();
         }
 
         #endregion
+
+        public ICommand ExitCommand
+        {
+            get
+            {
+                if (_exitCommand == null)
+                {
+                    _exitCommand = new DelegateCommand(Exit);
+                }
+                return _exitCommand;
+            }
+        }
+
+        private void Exit()
+        {
+            Application.Current.Shutdown();
+        }
+
+        #region Таймер, проверяющий наличие интернета
         private void timer_callback(object state)
         {
             var result = Helper.EchoIsOnline;
@@ -251,23 +268,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private void StopTimer()
         {
             _timer?.Dispose();
-        }
-
-        public ICommand ExitCommand
-        {
-            get
-            {
-                if (_exitCommand == null)
-                {
-                    _exitCommand = new DelegateCommand(Exit);
-                }
-                return _exitCommand;
-            }
-        }
-
-        private void Exit()
-        {
-            Application.Current.Shutdown();
-        }
+        } 
+        #endregion
     }
 }

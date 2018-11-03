@@ -1,4 +1,4 @@
-﻿using EchoGrabber.GUI.WPF.Model;
+﻿using EchoGrabber.GUI.WPF.Helpers;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -19,7 +19,11 @@ namespace EchoGrabber.GUI.WPF.View
             InitializeComponent();
             Loaded += SplashWindow_Loaded;
         }
-
+        /// <summary>
+        /// Конструктор окна статуса выполнения
+        /// </summary>
+        /// <param name="url">URL подкаста</param>
+        /// <param name="bi">Путь к браузеру, в котором нужно открыть страницу со списком подкастов.</param>
         public StatusWindow(string url, BrowserInfo bi)
         {
             InitializeComponent();
@@ -73,7 +77,12 @@ namespace EchoGrabber.GUI.WPF.View
         {
             Application.Current.Shutdown();
         }
-
+        /// <summary>
+        /// Создание страницы html с подкастами
+        /// </summary>
+        /// <param name="name">Имя подкаста</param>
+        /// <param name="url">URL подкаста</param>
+        /// <param name="bi">Информация о браузере, в котором открыть страницу по завершении.</param>
         internal void CreateHtml(string name, string url, BrowserInfo bi)
         {
             var filename = $"{url.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1]}.html";

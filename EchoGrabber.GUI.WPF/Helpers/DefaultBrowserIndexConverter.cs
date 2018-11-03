@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace EchoGrabber.GUI.WPF.Model
+namespace EchoGrabber.GUI.WPF.Helpers
 {
+    /// <summary>
+    /// Конвертер для получения порядкового индекса браузера по умолчанию
+    /// </summary>
     public class DefaultBrowserIndexConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

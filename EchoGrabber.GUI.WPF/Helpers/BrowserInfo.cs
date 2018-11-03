@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace EchoGrabber.GUI.WPF.Model
+namespace EchoGrabber.GUI.WPF.Helpers
 {
     public class BrowserInfo
     {

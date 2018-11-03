@@ -58,11 +58,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\BrowserInfo.cs" />
-    <Compile Include="Model\DefaultBrowserIndexConverter.cs" />
-    <Compile Include="Model\IconConverter.cs" />
-    <Compile Include="Model\IconExtensions.cs" />
-    <Compile Include="Model\OsTools.cs" />
+    <Compile Include="Helpers\BrowserInfo.cs" />
+    <Compile Include="Helpers\DefaultBrowserIndexConverter.cs" />
+    <Compile Include="Helpers\IconConverter.cs" />
+    <Compile Include="Helpers\IconExtensions.cs" />
+    <Compile Include="Helpers\OsTools.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

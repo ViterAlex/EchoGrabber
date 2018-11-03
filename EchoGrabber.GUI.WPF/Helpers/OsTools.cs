@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace EchoGrabber.GUI.WPF.Model
+namespace EchoGrabber.GUI.WPF.Helpers
 {
     public class OsTools
     {
@@ -29,9 +29,7 @@ namespace EchoGrabber.GUI.WPF.Model
                 using (var p = Process.GetCurrentProcess())
                 {
                     if (!IsWow64Process(p.Handle, out bool retVal))
-                    {
                         return false;
-                    }
                     return retVal;
                 }
             }
@@ -91,7 +89,6 @@ namespace EchoGrabber.GUI.WPF.Model
                         var isDefault = GetDefaultBrowserPath() == iconPath;
                         result.Add(new BrowserInfo(browserName, browserPath, icon, isDefault));
                     }
-
             return result;
         }
 

@@ -7,7 +7,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace EchoGrabber.GUI.WPF.Model
+namespace EchoGrabber.GUI.WPF.Helpers
 {
     public static class IconExtensions
     {

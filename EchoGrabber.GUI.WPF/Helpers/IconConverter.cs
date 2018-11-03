@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace EchoGrabber.GUI.WPF.Model
+namespace EchoGrabber.GUI.WPF.Helpers
 {
     public class IconConverter : IValueConverter
     {

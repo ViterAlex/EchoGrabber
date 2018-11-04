@@ -16,7 +16,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
         //private string _msgTitle = Application.Current.Resources["Title"].ToString();
         private Predicate<object> _podcastsFilter;
-        private DownloadViewModel _dvm;
+        private ProcessViewModel _dvm;
 
         public ICollectionView Browsers
         {
@@ -61,7 +61,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         private void Download(PodcastInfo podcast)
         {
-            _dvm = new DownloadViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
+            _dvm = new ProcessViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
             _dvm.Download();
         }
 
@@ -78,7 +78,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         private void CreatePlaylist(PodcastInfo podcast)
         {
-            _dvm = new DownloadViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
+            _dvm = new ProcessViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
             _dvm.CreatePlaylist();
             //using (var dialog = new SaveFileDialog())
             //{
@@ -116,7 +116,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         /// <param name="podcast">Ссылка на экземпляр класса Podcast</param>
         private void PodcastnOnHtmlPage(PodcastInfo podcast)
         {
-            _dvm = new DownloadViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
+            _dvm = new ProcessViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
             _dvm.CreateHtml(Browsers.CurrentItem as BrowserInfo);
             //var sw = new StatusWindow(podcast.Url, Browsers.CurrentItem as BrowserInfo)
             //{

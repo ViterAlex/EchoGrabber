@@ -9,7 +9,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace EchoGrabber.GUI.WPF.ViewModel
 {
-    public class DownloadViewModel : ViewModelBase
+    public class ProcessViewModel : ViewModelBase
     {
         public PodcastInfo CurrentPodcast
         {
@@ -21,7 +21,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         // Using a DependencyProperty as the backing store for CurrentPodcast.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CurrentPodcastProperty =
-            DependencyProperty.Register("CurrentPodcast", typeof(PodcastInfo), typeof(DownloadViewModel), new PropertyMetadata(null));
+            DependencyProperty.Register("CurrentPodcast", typeof(PodcastInfo), typeof(ProcessViewModel), new PropertyMetadata(null));
 
         public bool IsBusy
         {
@@ -37,7 +37,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         // Using a DependencyProperty as the backing store for Status.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StatusProperty =
-            DependencyProperty.Register("Status", typeof(string), typeof(DownloadViewModel), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("Status", typeof(string), typeof(ProcessViewModel), new PropertyMetadata(string.Empty));
 
 
 
@@ -46,7 +46,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             DependencyProperty.Register("IsBusy", typeof(bool), typeof(MainViewModel), new PropertyMetadata(false));
         private readonly string _msgTitle = Application.Current.Resources["Title"].ToString();
 
-        public DownloadViewModel(PodcastInfo podcast, BrowserInfo browserInfo)
+        public ProcessViewModel(PodcastInfo podcast, BrowserInfo browserInfo)
         {
             CurrentPodcast = podcast;
             _browserInfo = browserInfo;

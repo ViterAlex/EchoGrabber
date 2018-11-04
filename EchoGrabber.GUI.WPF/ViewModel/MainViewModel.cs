@@ -1,33 +1,22 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Forms;
-using System.Windows.Input;
-using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using System.Collections.Generic;
 using System.Windows.Threading;
-using EchoGrabber.GUI.WPF.View;
 using EchoGrabber.GUI.WPF.Helpers;
 
 namespace EchoGrabber.GUI.WPF.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ViewModelBase
     {
-        private DelegateCommand _exitCommand;
-        private DelegateCommand _filterActualCommand;
-        private DelegateCommand _filterArchiveCommand;
-        private DelegateCommand _updateCommand;
-        private DelegateCommand<string> _filterCommand;
-        private DelegateCommand<PodcastInfo> _showPodcastsCommand;
-        private DelegateCommand<PodcastInfo> _createPlaylistCommand;
 
         private System.Threading.Timer _timer;
         private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
-        private string _msgTitle = Application.Current.Resources["Title"].ToString();
+        //private string _msgTitle = Application.Current.Resources["Title"].ToString();
         private Predicate<object> _podcastsFilter;
+        private DownloadViewModel _dvm;
 
         public ICollectionView Browsers
         {
@@ -59,93 +48,21 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         public static readonly DependencyProperty AvailableProperty =
             DependencyProperty.Register("Available", typeof(bool), typeof(MainViewModel), new PropertyMetadata(false));
 
-        public Visibility IsUpdating
-        {
-            get { return (Visibility)GetValue(IsUpdatingProperty); }
-            set { SetValue(IsUpdatingProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsUpdating.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsUpdatingProperty =
-            DependencyProperty.Register("IsUpdating", typeof(Visibility), typeof(MainViewModel), new PropertyMetadata(Visibility.Hidden));
-
-        #region Команды
-        public DelegateCommand<PodcastInfo> CreatePlaylistCommand
-        {
-            get
-            {
-                if (_createPlaylistCommand == null)
-                {
-                    _createPlaylistCommand = new DelegateCommand<PodcastInfo>(CreatePlaylist, CanExecute);
-                }
-                return _createPlaylistCommand;
-            }
-        }
-
-        public DelegateCommand FilterActualCommand
-        {
-            get
-            {
-                if (_filterActualCommand == null)
-                {
-                    _filterActualCommand = new DelegateCommand(FilterActual);
-                }
-                return _filterActualCommand;
-            }
-        }
-
-        public DelegateCommand FilterArchiveCommand
-        {
-            get
-            {
-                if (_filterArchiveCommand == null)
-                {
-                    _filterArchiveCommand = new DelegateCommand(FilterArchive);
-                }
-                return _filterArchiveCommand;
-            }
-        }
-
-        public DelegateCommand<string> FilterCommand
-        {
-            get
-            {
-                if (_filterCommand == null)
-                {
-                    _filterCommand = new DelegateCommand<string>(FilterPodcasts);
-                }
-                return _filterCommand;
-            }
-        }
-
-        public DelegateCommand<PodcastInfo> ShowPodcastsCommand
-        {
-            get
-            {
-                if (_showPodcastsCommand == null)
-                {
-                    _showPodcastsCommand = new DelegateCommand<PodcastInfo>(PodcastnOnHtmlPage, CanExecute);
-                }
-                return _showPodcastsCommand;
-            }
-        }
-
-        public DelegateCommand UpdateCommand
-        {
-            get
-            {
-                if (_updateCommand == null)
-                {
-                    _updateCommand = new DelegateCommand(Update);
-                }
-                return _updateCommand;
-            }
-        }
-        #endregion
-
         private bool CanExecute(PodcastInfo p)
         {
             return EchoPrograms.Actual.Count != 0 && EchoPrograms.Archived.Count != 0 && Podcasts.CurrentItem != null;
+        }
+
+
+        private bool CanDownload(PodcastInfo podcast)
+        {
+            return false;
+        }
+
+        private void Download(PodcastInfo podcast)
+        {
+            _dvm = new DownloadViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
+            _dvm.Download();
         }
 
         private void Update()
@@ -153,7 +70,6 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             StopTimer();
             Dispatcher.Invoke(() =>
             {
-                IsUpdating = Visibility.Hidden;
                 Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Actual);
                 Browsers = CollectionViewSource.GetDefaultView(OsTools.GetBrowsers());
             });
@@ -162,31 +78,24 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         private void CreatePlaylist(PodcastInfo podcast)
         {
-            using (var dialog = new SaveFileDialog())
-            {
-                dialog.Filter = "Плейлисты|*.m3u";
-                dialog.FileName = $"{podcast.Title}";
-                if (dialog.ShowDialog() != DialogResult.OK) return;
+            _dvm = new DownloadViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
+            _dvm.CreatePlaylist();
+            //using (var dialog = new SaveFileDialog())
+            //{
+            //    dialog.Filter = "Плейлисты|*.m3u";
+            //    dialog.FileName = $"{podcast.Title}";
+            //    if (dialog.ShowDialog() != DialogResult.OK) return;
 
-                var result = Grabber.CreatePlaylist(dialog.FileName, podcast.Url);
-                if (!result)
-                {
-                    CreatePlaylistFailed(podcast);
-                    return;
-                }
-                MessageBox.Show("Плейлист создан!", _msgTitle, MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            //    var result = Grabber.CreatePlaylist(dialog.FileName, podcast.Url);
+            //    if (!result)
+            //    {
+            //        CreatePlaylistFailed(podcast);
+            //        return;
+            //    }
+            //    MessageBox.Show("Плейлист создан!", _msgTitle, MessageBoxButton.OK, MessageBoxImage.Information);
+            //}
         }
 
-        private void CreatePlaylistFailed(PodcastInfo podcast)
-        {
-            var result = MessageBox.Show($"Не удалось создать плейлист для программы \"{podcast.Title}\".\r\n" +
-                $" Открыть страницу программы в браузере?", _msgTitle, MessageBoxButton.YesNo, MessageBoxImage.Error);
-            if (result == MessageBoxResult.Yes)
-            {
-                Process.Start((Browsers.CurrentItem as BrowserInfo).StartupPath, $"https://echo.msk.ru{podcast.Url}");
-            }
-        }
 
         private void FilterArchive()
         {
@@ -207,11 +116,15 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         /// <param name="podcast">Ссылка на экземпляр класса Podcast</param>
         private void PodcastnOnHtmlPage(PodcastInfo podcast)
         {
-            var sw = new StatusWindow(podcast.Url, Browsers.CurrentItem as BrowserInfo)
-            {
-                ShowCancelButton = Visibility.Hidden
-            };
-            sw.ShowDialog();
+            _dvm = new DownloadViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
+            _dvm.CreateHtml(Browsers.CurrentItem as BrowserInfo);
+            //var sw = new StatusWindow(podcast.Url, Browsers.CurrentItem as BrowserInfo)
+            //{
+            //    ShowCancelButton = Visibility.Hidden
+            //};
+            ////IsBusy = Visibility.Collapsed;
+            //sw.ShowDialog();
+            ////IsBusy = Visibility.Visible;
         }
 
         private void FilterPodcasts(string filterIndex)
@@ -231,18 +144,6 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         }
 
         #endregion
-
-        public ICommand ExitCommand
-        {
-            get
-            {
-                if (_exitCommand == null)
-                {
-                    _exitCommand = new DelegateCommand(Exit);
-                }
-                return _exitCommand;
-            }
-        }
 
         private void Exit()
         {
@@ -268,7 +169,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private void StopTimer()
         {
             _timer?.Dispose();
-        } 
+        }
         #endregion
     }
 }

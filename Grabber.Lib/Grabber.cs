@@ -185,21 +185,21 @@ namespace EchoGrabber
                     "table{" +
                     "  border: 3px solid;" +
                     "  border-collapse: collapse;" +
-                    "}" +
+                    "}\r\n" +
                     "th{" +
                     "  background-color: #888888;" +
                     "  border-left: 2px solid;" +
-                    "}" +
+                    "}\r\n" +
                     "td{" +
                     "  border-left: 2px solid;" +
                     "  padding: 10px;" +
-                    "}" +
+                    "}\r\n" +
                     "tr{" +
                     "  border-top: 1px solid;" +
-                    "}" +
+                    "}\r\n" +
                     "tr:nth-child(odd) {" +
                     "  background-color: #f2f2f2;" +
-                    "}");
+                    "}\r\n");
                 xmlWr.WriteEndElement();//style
                 xmlWr.WriteEndElement(); //head
 

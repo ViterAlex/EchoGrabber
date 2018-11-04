@@ -1,23 +1,26 @@
 ﻿<Window x:Class="EchoGrabber.GUI.WPF.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:EchoGrabber.GUI.WPF.ViewModel"
-        mc:Ignorable="d"
-        Height="450"
-        Icon="{StaticResource ProgramIcon}"
-        Title="{StaticResource Title}"
-        Width="800">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:EchoGrabber.GUI.WPF.ViewModel"
+    Title="{StaticResource Title}"
+    Width="800"
+    Height="450"
+    Icon="{StaticResource ProgramIcon}"
+    Visibility="{Binding IsBusy}"
+    mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
-            <!--Команды-->
+            <!--  Команды  -->
             <vm:CommandReference x:Key="CreatePlaylistCommandReference"
-                                 Command="{Binding CreatePlaylistCommand}" />
+                Command="{Binding CreatePlaylistCommand}" />
             <vm:CommandReference x:Key="ShowPodcastsCommandReference"
-                                 Command="{Binding ShowPodcastsCommand}" />
+                Command="{Binding ShowPodcastsCommand}" />
             <vm:CommandReference x:Key="UpdateCommandReference"
-                                 Command="{Binding UpdateCommand}" />
+                Command="{Binding UpdateCommand}" />
+            <vm:CommandReference x:Key="DownloadCommandReference"
+                Command="{Binding DownloadCommand}" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -27,125 +30,93 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid>
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                    <RadioButton Content="Активные"
-                                 IsChecked="True"
-                                 Command="{Binding FilterActualCommand}" />
-                    <RadioButton Content="Архив"
-                                 Command="{Binding FilterArchiveCommand}" />
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <RadioButton Command="{Binding FilterActualCommand}"
+                        Content="Активные"
+                        IsChecked="True" />
+                    <RadioButton Command="{Binding FilterArchiveCommand}"
+                        Content="Архив" />
                 </StackPanel>
-                <StackPanel Grid.Column="1"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center">
-                    <ComboBox ItemsSource="{Binding Browsers}"
-                              IsSynchronizedWithCurrentItem="True"
-                              SelectedIndex="{Binding Browsers, Converter={StaticResource DefaultBrowserIndexConverter}, Mode=OneWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal"
-                                            VerticalAlignment="Center"
-                                            MaxHeight="24">
-                                    <Image Source="{Binding Icon, Converter={StaticResource IconConverter}}" />
-                                    <Label Content="{Binding Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <Button MaxHeight="32"
-                            Style="{StaticResource HyperlinkLikeButton}"
-                            ToolTip="{StaticResource LinksOnOnePage}"
-                            Command="{StaticResource ShowPodcastsCommandReference}"
-                            CommandParameter="{Binding ElementName=listbox, Path=SelectedValue}">
-                        <Image Source="{StaticResource HtmlImage}"
-                               Stretch="Fill" />
-                    </Button>
-                    <Button MaxHeight="32"
-                            Style="{StaticResource HyperlinkLikeButton}"
-                            ToolTip="{StaticResource CreatePlaylist}"
-                            Command="{StaticResource CreatePlaylistCommandReference}"
-                            CommandParameter="{Binding ElementName=listbox, Path=SelectedValue}">
-                        <Image Source="{StaticResource PlayListImage}"
-                               Stretch="Fill" />
-                    </Button>
-                </StackPanel>
+                <ComboBox Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsSynchronizedWithCurrentItem="True"
+                    ItemsSource="{Binding Browsers}"
+                    SelectedIndex="{Binding Browsers, Converter={StaticResource DefaultBrowserIndexConverter}, Mode=OneWay}"
+                    Style="{StaticResource ComboBoxFlatStyle}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel MaxHeight="24"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Image Source="{Binding Icon, Converter={StaticResource IconConverter}}" />
+                                <Label Padding="5,0,5,0"
+                                    VerticalAlignment="Center"
+                                    Content="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
                 <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right">
-                    <RadioButton Content="{StaticResource FilterAll}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="0"
-                                 IsChecked="True" />
-                    <RadioButton Content="{StaticResource Filter1-9}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="1" />
-                    <RadioButton Content="{StaticResource FilterA-G}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="2" />
-                    <RadioButton Content="{StaticResource FilterD-Z}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="3" />
-                    <RadioButton Content="{StaticResource FilterI-M}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="4" />
-                    <RadioButton Content="{StaticResource FilterN-R}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="5" />
-                    <RadioButton Content="{StaticResource FilterS-F}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="6" />
-                    <RadioButton Content="{StaticResource FilterKh-Sh}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="7" />
-                    <RadioButton Content="{StaticResource FilterSch-Ya}"
-                                 Command="{Binding FilterCommand}"
-                                 CommandParameter="8" />
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="0"
+                        Content="{StaticResource FilterAll}"
+                        IsChecked="True" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="1"
+                        Content="{StaticResource Filter1-9}" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="2"
+                        Content="{StaticResource FilterA-G}" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="3"
+                        Content="{StaticResource FilterD-Z}" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="4"
+                        Content="{StaticResource FilterI-M}" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="5"
+                        Content="{StaticResource FilterN-R}" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="6"
+                        Content="{StaticResource FilterS-F}" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="7"
+                        Content="{StaticResource FilterKh-Sh}" />
+                    <RadioButton Command="{Binding FilterCommand}"
+                        CommandParameter="8"
+                        Content="{StaticResource FilterSch-Ya}" />
                 </StackPanel>
             </Grid>
 
-            <ListView ItemsSource="{Binding Podcasts}"
-                      Grid.Row="1"
-                      Name="listbox"
-                      IsSynchronizedWithCurrentItem="True"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <ListView.Resources>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Margin"
-                                Value="1" />
-                    </Style>
-                </ListView.Resources>
+            <ListView Name="listbox"
+                Grid.Row="1"
+                HorizontalContentAlignment="Stretch"
+                IsSynchronizedWithCurrentItem="True"
+                ItemTemplate="{StaticResource PodcastItemTemplate}"
+                ItemsSource="{Binding Podcasts}"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel IsItemsHost="True"
-                                   Orientation="Vertical" />
+                            Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding Title}"
-                               Margin="2"
-                               Tag="{Binding}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
             </ListView>
-            <Viewbox Visibility="{Binding IsUpdating}"
-                     Grid.Row="1"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch">
-                <Label Content="Идёт обновление подкастов..."
-                       Foreground="Gray" />
-            </Viewbox>
         </Grid>
     </Border>
 </Window>

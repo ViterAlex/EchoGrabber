@@ -2,15 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:clr="clr-namespace:System;assembly=mscorlib"
-             xmlns:model="clr-namespace:EchoGrabber.GUI.WPF.Helpers"
+             xmlns:hlp="clr-namespace:EchoGrabber.GUI.WPF.Helpers"
              StartupUri="View/SplashWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <model:IconConverter x:Key="IconConverter" />
-            <model:DefaultBrowserIndexConverter x:Key="DefaultBrowserIndexConverter"/>
+            <hlp:IconConverter x:Key="IconConverter" />
+            <hlp:DefaultBrowserIndexConverter x:Key="DefaultBrowserIndexConverter"/>
+            <hlp:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <ImageBrush x:Key="SplashBackground"
                         ImageSource="pack://application:,,,/Resources/echo_logo.png"
                         Stretch="Fill" />
@@ -23,8 +21,12 @@
             <clr:String x:Key="Title">Граббер подкастов «Эха Москвы»</clr:String>
             <clr:String x:Key="ActivePodcastsTitle">Активные</clr:String>
             <clr:String x:Key="ArchivedPodcastsTitle">Архивные</clr:String>
-            <clr:String x:Key="LinksOnOnePage">Все ссылки</clr:String>
-            <clr:String x:Key="CreatePlaylist">Создать плейлист</clr:String>
+            <clr:String x:Key="LinksOnOnePage">Ссылки</clr:String>
+            <clr:String x:Key="LinksOnOnePageTooltip">Вывести ссылки на все подкасты на одной странице</clr:String>
+            <clr:String x:Key="CreatePlaylist">Плейлист</clr:String>
+            <clr:String x:Key="CreatePlaylistTooltip">Создать плейлист со ссылками на подкасты</clr:String>
+            <clr:String x:Key="DownloadAll">Скачать</clr:String>
+            <clr:String x:Key="DownloadAllTooltip">Скачать весь подкаст для прослушивания офф-лайн</clr:String>
             <clr:String x:Key="Update">Обновить</clr:String>
             <clr:String x:Key="FilterAll">Все</clr:String>
             <clr:String x:Key="Filter1-9">1-9</clr:String>
@@ -36,6 +38,10 @@
             <clr:String x:Key="FilterKh-Sh">Х-Ш</clr:String>
             <clr:String x:Key="FilterSch-Ya">Щ-Я</clr:String>
             <clr:String x:Key="SplashCancel">Отмена</clr:String>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+                <ResourceDictionary Source="Templates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

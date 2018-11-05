@@ -6,15 +6,16 @@ using Application = System.Windows.Application;
 using System.Collections.Generic;
 using System.Windows.Threading;
 using EchoGrabber.GUI.WPF.Helpers;
+using System.Threading;
+using System.Linq;
 
 namespace EchoGrabber.GUI.WPF.ViewModel
 {
     public partial class MainViewModel : ViewModelBase
     {
 
-        private System.Threading.Timer _timer;
+        private Timer _timer;
         private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
-        //private string _msgTitle = Application.Current.Resources["Title"].ToString();
         private Predicate<object> _podcastsFilter;
         private ProcessViewModel _dvm;
 
@@ -80,30 +81,20 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         {
             _dvm = new ProcessViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
             _dvm.CreatePlaylist();
-            //using (var dialog = new SaveFileDialog())
-            //{
-            //    dialog.Filter = "Плейлисты|*.m3u";
-            //    dialog.FileName = $"{podcast.Title}";
-            //    if (dialog.ShowDialog() != DialogResult.OK) return;
-
-            //    var result = Grabber.CreatePlaylist(dialog.FileName, podcast.Url);
-            //    if (!result)
-            //    {
-            //        CreatePlaylistFailed(podcast);
-            //        return;
-            //    }
-            //    MessageBox.Show("Плейлист создан!", _msgTitle, MessageBoxButton.OK, MessageBoxImage.Information);
-            //}
         }
 
-
+        /// <summary>
+        /// Фильтр архивных передач
+        /// </summary>
         private void FilterArchive()
         {
             Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Archived ?? new List<PodcastInfo>());
             Podcasts.Filter = _podcastsFilter;
             Podcasts.Refresh();
         }
-
+        /// <summary>
+        /// Фильтр актуальных программ
+        /// </summary>
         private void FilterActual()
         {
             Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Actual);
@@ -118,13 +109,6 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         {
             _dvm = new ProcessViewModel(podcast, Browsers.CurrentItem as BrowserInfo);
             _dvm.CreateHtml(Browsers.CurrentItem as BrowserInfo);
-            //var sw = new StatusWindow(podcast.Url, Browsers.CurrentItem as BrowserInfo)
-            //{
-            //    ShowCancelButton = Visibility.Hidden
-            //};
-            ////IsBusy = Visibility.Collapsed;
-            //sw.ShowDialog();
-            ////IsBusy = Visibility.Visible;
         }
 
         private void FilterPodcasts(string filterIndex)
@@ -141,6 +125,17 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         {
             Available = Helper.EchoIsOnline;
             Update();
+            var t = new Thread(() => GetPodcastsInfo());
+            t.Start();
+        }
+
+        private void GetPodcastsInfo()
+        {
+            foreach (var item in EchoPrograms.Actual)
+            {
+                item.Issues = Grabber.GetAllPodcastLinks(item.Url).ToList();
+                OnPropertyChanged(nameof(Podcasts));
+            }
         }
 
         #endregion
@@ -163,7 +158,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
 
         private void StartTimer()
         {
-            _timer = new System.Threading.Timer(timer_callback, null, 0, 1000);
+            _timer = new Timer(timer_callback, null, 0, 1000);
         }
 
         private void StopTimer()

@@ -9,7 +9,7 @@ namespace EchoGrabber.GUI.WPF.ViewModel
         private DelegateCommand _filterActualCommand;
         private DelegateCommand _filterArchiveCommand;
         private DelegateCommand _updateCommand;
-        private DelegateCommand<string> _filterCommand;
+        private DelegateCommand<string> _filterPodcastsCommand;
         private DelegateCommand<PodcastInfo> _showPodcastsCommand;
         private DelegateCommand<PodcastInfo> _createPlaylistCommand;
         private DelegateCommand<PodcastInfo> _downloadCommand;
@@ -74,15 +74,15 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             }
         }
 
-        public DelegateCommand<string> FilterCommand
+        public DelegateCommand<string> FilterPodcastsCommand
         {
             get
             {
-                if (_filterCommand == null)
+                if (_filterPodcastsCommand == null)
                 {
-                    _filterCommand = new DelegateCommand<string>(FilterPodcasts);
+                    _filterPodcastsCommand = new DelegateCommand<string>(FilterPodcasts);
                 }
-                return _filterCommand;
+                return _filterPodcastsCommand;
             }
         }
 

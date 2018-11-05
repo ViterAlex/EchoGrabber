@@ -108,7 +108,7 @@
     <ControlTemplate x:Key="NormalItemTemplate"
         TargetType="ListViewItem">
         <Label Padding="0,5"
-            Content="{Binding Title}" />
+            Content="{Binding}" />
     </ControlTemplate>
 
     <DataTemplate x:Key="PodcastItemTemplate"

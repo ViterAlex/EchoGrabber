@@ -66,37 +66,36 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-
                 <StackPanel Grid.Column="2"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="0"
                         Content="{StaticResource FilterAll}"
                         IsChecked="True" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="1"
                         Content="{StaticResource Filter1-9}" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="2"
                         Content="{StaticResource FilterA-G}" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="3"
                         Content="{StaticResource FilterD-Z}" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="4"
                         Content="{StaticResource FilterI-M}" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="5"
                         Content="{StaticResource FilterN-R}" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="6"
                         Content="{StaticResource FilterS-F}" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="7"
                         Content="{StaticResource FilterKh-Sh}" />
-                    <RadioButton Command="{Binding FilterCommand}"
+                    <RadioButton Command="{Binding FilterPodcastsCommand}"
                         CommandParameter="8"
                         Content="{StaticResource FilterSch-Ya}" />
                 </StackPanel>

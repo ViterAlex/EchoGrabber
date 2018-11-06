@@ -134,7 +134,8 @@ namespace EchoGrabber.GUI.WPF.ViewModel
             foreach (var item in EchoPrograms.Actual)
             {
                 item.Issues = Grabber.GetAllPodcastLinks(item.Url).ToList();
-                OnPropertyChanged(nameof(Podcasts));
+                Dispatcher.Invoke(() =>
+                Podcasts = CollectionViewSource.GetDefaultView(EchoPrograms.Actual));
             }
         }
 

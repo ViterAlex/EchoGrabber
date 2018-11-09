@@ -28,6 +28,9 @@ namespace EchoGrabber
             { "Url", ".//a[@class='download iblock']"},//Ссылка на mp3
         };
 
+        public const string ARCHIVE = "/programs/archived";
+        public const string ACTUAL = "/programs";
+
         private static WebClient _client = new WebClient();
         //Получение информации о выпуске
         private static IssueInfo GetIssueInfo(HtmlNode node)
@@ -99,7 +102,7 @@ namespace EchoGrabber
                     yield return link;
         }
         //Получение ссылок на страницы отдельных передач
-        public static IEnumerable<PodcastInfo> GetPodcastLinks(string url = "/programs")
+        public static IEnumerable<PodcastInfo> GetPodcastLinks(string url = ACTUAL)
         {
             url = $"https://echo.msk.ru{url}";
             var doc = GetDocument(url);

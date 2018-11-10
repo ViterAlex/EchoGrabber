@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoGrabber.Db", "EchoGrabb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A2C416E9-EA39-47B0-8069-68B9DD3D5D86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoGrabber.Db.Tests", "EchoGrabber.DbTests\EchoGrabber.Db.Tests.csproj", "{B5D86FC5-8930-41EB-8DAD-A193572F048A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoGrabber.Tests", "Tests\EchoGrabber.Tests\EchoGrabber.Tests.csproj", "{DDA2FD3C-C8D0-49C3-A21A-CFB41279B4BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,16 +31,16 @@ Global
 		{3B0B63C5-A3FE-4545-AE18-7351C995B79F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B0B63C5-A3FE-4545-AE18-7351C995B79F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B0B63C5-A3FE-4545-AE18-7351C995B79F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B5D86FC5-8930-41EB-8DAD-A193572F048A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5D86FC5-8930-41EB-8DAD-A193572F048A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5D86FC5-8930-41EB-8DAD-A193572F048A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5D86FC5-8930-41EB-8DAD-A193572F048A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDA2FD3C-C8D0-49C3-A21A-CFB41279B4BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA2FD3C-C8D0-49C3-A21A-CFB41279B4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA2FD3C-C8D0-49C3-A21A-CFB41279B4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA2FD3C-C8D0-49C3-A21A-CFB41279B4BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B5D86FC5-8930-41EB-8DAD-A193572F048A} = {A2C416E9-EA39-47B0-8069-68B9DD3D5D86}
+		{DDA2FD3C-C8D0-49C3-A21A-CFB41279B4BA} = {A2C416E9-EA39-47B0-8069-68B9DD3D5D86}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {986979B8-A879-4CA5-8E4D-6081A50E2BD3}

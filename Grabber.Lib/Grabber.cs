@@ -47,11 +47,11 @@ namespace EchoGrabber
             }
             return new IssueInfo()
             {
-                DateTime = dt,
+                DateTime = dt.ParseDateTime(),
                 Title = title,
                 Url = url,
-                Duration = duration,
-                Size = size,
+                Duration = duration.ParseDuration(),
+                Size = size.ParseSize(),
                 Guests = guests
             };
         }
@@ -64,6 +64,7 @@ namespace EchoGrabber
             var nodes = doc.DocumentNode.SelectNodes(Xpathes["Base"]);
             return nodes != null;
         }
+
         private static HtmlDocument GetDocument(string url)
         {
             if (!Helper.EchoIsOnline) return null;
@@ -146,8 +147,7 @@ namespace EchoGrabber
                 foreach (var issue in podcasts)
                 {
                     if (issue.Url.IsNullOrEmpty()) continue;
-                    var format = issue.Duration.Length > 5 ? "h\\:mm\\:ss" : "mm\\:ss";
-                    var seconds = (int)Math.Truncate(TimeSpan.ParseExact(issue.Duration, format, CultureInfo.InvariantCulture).TotalSeconds);
+                    var seconds = (int)Math.Truncate(issue.Duration.TotalSeconds);
                     stream.WriteLine($"#EXTINF:{seconds},«Эхо Москвы»,{++counter} {issue.Title}");
                     stream.WriteLine(issue.Url);
                 }
@@ -236,7 +236,7 @@ namespace EchoGrabber
                     //xmlWr.WriteStartElement("p");
                     xmlWr.WriteStartElement("a");
                     xmlWr.WriteAttributeString("href", item.Url);
-                    xmlWr.WriteAttributeString("title", $"Скачать подкаст за {item.DateTime}. ({item.Size.Trim()})");
+                    xmlWr.WriteAttributeString("title", $"Скачать подкаст за {item.DateTime:dd.MM.YYYY}. ({item.Size} МБ)");
                     xmlWr.WriteString($"{item.Title} ({item.Duration})");
                     xmlWr.WriteEndElement();//a
                     //xmlWr.WriteEndElement();//p
@@ -252,7 +252,7 @@ namespace EchoGrabber
                     xmlWr.WriteEndElement();//td
 
                     xmlWr.WriteStartElement("td");
-                    xmlWr.WriteString(item.DateTime);
+                    xmlWr.WriteString(item.DateTime.ToShortDateString());
                     xmlWr.WriteEndElement();//td
 
                     xmlWr.WriteEndElement();//tr

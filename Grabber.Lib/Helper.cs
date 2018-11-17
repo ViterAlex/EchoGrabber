@@ -47,8 +47,10 @@ namespace EchoGrabber
         /// </summary>
         public static float ParseSize(this string text)
         {
+            if (text.IsNullOrEmpty())
+                return 0f;
             var val = text.Trim().Split(' ')[0];
-            return float.Parse(val, CultureInfo.InvariantCulture);
+            return float.Parse(val, CultureInfo.InvariantCulture).Round();
         }
 
         public static string Clean(this string text)
@@ -87,6 +89,12 @@ namespace EchoGrabber
         {
             return HttpUtility.HtmlDecode(html);
         }
-
+        /// <summary>
+        /// Округление дробного числа до 1 знака после запятой
+        /// </summary>
+        public static float Round(this float value)
+        {
+            return (float)Math.Round(value, 1);
+        }
     }
 }

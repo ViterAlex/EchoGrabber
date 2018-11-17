@@ -45,6 +45,10 @@ namespace EchoGrabber
             {
                 title = dt;
             }
+            if (url.IsNullOrEmpty())
+            {
+                return null;
+            }
             return new IssueInfo()
             {
                 DateTime = dt.ParseDateTime(),
@@ -83,7 +87,9 @@ namespace EchoGrabber
             var doc = GetDocument(url);
             if (doc == null) yield break;
 
-            var nodes = doc.DocumentNode.SelectNodes(Xpathes["Base"])?.Select(n => GetIssueInfo(n));
+            var nodes = doc.DocumentNode.SelectNodes(Xpathes["Base"])?
+                .Select(n => GetIssueInfo(n))
+                .Where(i => i != null);
             if (nodes == null) yield break;//на странице нет подкастов
             foreach (var node in nodes)
             {

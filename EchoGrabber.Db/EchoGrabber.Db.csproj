@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Db\grabber.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

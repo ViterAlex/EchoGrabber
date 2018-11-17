@@ -26,6 +26,7 @@ namespace EchoGrabber
             { "Size", ".//a[contains(@class,'download')]//span[@class='size']"},//Размер файла
             { "Title", ".//*[@class='title type2']"},//Название подкаста
             { "Url", ".//a[@class='download iblock']"},//Ссылка на mp3
+            { "Author", ".//p[@class='author type1 iblock']//strong[@class='name']"}// Имя автора передачи
         };
 
         private static WebClient _client = new WebClient();
@@ -34,6 +35,7 @@ namespace EchoGrabber
         {
             var url = node.SelectSingleNode(Xpathes["Url"])?.Attributes["href"].Value;
             var title = node.SelectSingleNode(Xpathes["Title"])?.InnerText?.Clean();
+            var author = node.SelectSingleNode(Xpathes["Author"])?.InnerText?.Clean();
             var dt = node.SelectSingleNode(Xpathes["DateTime"])?.Attributes["title"].Value;
             var duration = node.SelectSingleNode(Xpathes["Duration"])?.InnerText.Clean();
             var size = node.SelectSingleNode(Xpathes["Size"])?.InnerText.Clean();
@@ -46,6 +48,7 @@ namespace EchoGrabber
             {
                 DateTime = dt,
                 Title = title,
+                Author = author,
                 Url = url,
                 Duration = duration,
                 Size = size,
@@ -180,6 +183,12 @@ namespace EchoGrabber
                 xmlWr.WriteString($"Подкасты программы «{progName}»");
                 xmlWr.WriteEndElement();//title
 
+                xmlWr.WriteStartElement("link");
+                xmlWr.WriteAttributeString("rel", "icon");
+                xmlWr.WriteAttributeString("type", "image/x-icon");
+                xmlWr.WriteAttributeString("href", "https://echo.msk.ru/favicon.ico?echo");
+                xmlWr.WriteEndElement();//link
+
                 xmlWr.WriteStartElement("style");
                 xmlWr.WriteString(
                     "table{" +
@@ -237,6 +246,12 @@ namespace EchoGrabber
                     xmlWr.WriteString($"{item.Title} ({item.Duration})");
                     xmlWr.WriteEndElement();//a
                     //xmlWr.WriteEndElement();//p
+
+                    if (!item.Author.IsNullOrEmpty())
+                    {
+                        xmlWr.WriteRaw("<br>");
+                        xmlWr.WriteString($"Автор: {item.Author}");
+                    }
 
                     if (!item.Guests.IsNullOrEmpty())
                     {
